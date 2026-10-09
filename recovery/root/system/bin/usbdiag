@@ -1,0 +1,13 @@
+#!/system/bin/sh
+# Bring-up: dump USB/adb gadget state (run from TWRP Advanced > Terminal).
+getprop | grep -E 'usb|adb'
+echo "udc: $(ls /sys/class/udc 2>&1)"
+echo "UDC bound: $(cat /config/usb_gadget/g1/UDC 2>&1)"
+echo "functions: $(ls /config/usb_gadget/g1/functions 2>&1)"
+echo "b.1: $(ls /config/usb_gadget/g1/configs/b.1 2>&1)"
+echo "ffs adb: $(ls /dev/usb-ffs/adb 2>&1)"
+echo "adbd pid: $(pidof adbd)"
+for f in /sys/class/usb_role/*/role /sys/class/udc/*/state /sys/class/udc/*/current_speed; do
+    [ -e "$f" ] && echo "$f: $(cat $f)"
+done
+dmesg | grep -iE 'mtu3|udc|ffs|gadget|usb_role|typec|fusb' | tail -15

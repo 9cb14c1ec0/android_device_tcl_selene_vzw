@@ -155,9 +155,9 @@ TARGET_SCREEN_WIDTH := 800
 TARGET_SCREEN_HEIGHT := 1340
 TW_FRAMERATE := 60
 TW_BRIGHTNESS_PATH := "/sys/class/leds/lcd-backlight/brightness"
-# TODO: confirm max_brightness on device (MTK panels are often 2047).
-TW_MAX_BRIGHTNESS := 255
-TW_DEFAULT_BRIGHTNESS := 120
+# Stock DT: lcd-backlight max-brightness = max-hw-brightness = 0x7ff.
+TW_MAX_BRIGHTNESS := 2047
+TW_DEFAULT_BRIGHTNESS := 1400
 TW_NO_SCREEN_BLANK := true
 TW_EXTRA_LANGUAGES := true
 TW_DEVICE_VERSION := selene_vzw-8189S
@@ -170,6 +170,9 @@ TW_USE_MODEL_HARDWARE_ID_FOR_DEVICE_ID := true
 TW_INCLUDE_FASTBOOTD := true
 # configfs USB (incl. MTP) from recovery/root/init.recovery.usb.rc
 TW_EXCLUDE_DEFAULT_USB_INIT := true
+# Bring-up: binding ffs.mtp+ffs.adb drops USB entirely (sideload, adb-only,
+# works). Keep adb reliable until MTP can be debugged over adb.
+TW_EXCLUDE_MTP := true
 TW_INCLUDE_REPACKTOOLS := true
 TW_INCLUDE_RESETPROP := true
 TW_INCLUDE_LIBRESETPROP := true
