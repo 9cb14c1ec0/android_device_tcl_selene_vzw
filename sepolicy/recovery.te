@@ -2,3 +2,7 @@
 # cannot be injected. Keep the recovery domain permissive until a proper
 # policy is written (eng builds only).
 permissive recovery;
+
+# Bring-up: early unauthenticated adb must work even if the adbd policy
+# for this vendor is incomplete. (su is already permissive on eng.)
+permissive adbd;

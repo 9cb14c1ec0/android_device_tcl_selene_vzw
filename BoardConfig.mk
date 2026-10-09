@@ -168,6 +168,8 @@ TW_USE_MODEL_HARDWARE_ID_FOR_DEVICE_ID := true
 # way stock recovery gets them. Do not duplicate them via TW_LOAD_VENDOR_MODULES.
 
 TW_INCLUDE_FASTBOOTD := true
+# configfs USB (incl. MTP) from recovery/root/init.recovery.usb.rc
+TW_EXCLUDE_DEFAULT_USB_INIT := true
 TW_INCLUDE_REPACKTOOLS := true
 TW_INCLUDE_RESETPROP := true
 TW_INCLUDE_LIBRESETPROP := true

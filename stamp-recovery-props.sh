@@ -13,7 +13,8 @@ sed -i \
     -e 's/^ro.build.version.release_or_codename=.*/ro.build.version.release_or_codename=13/' \
     -e 's/^ro.build.version.security_patch=.*/ro.build.version.security_patch=2026-05-05/' \
     "$prop"
-for p in ro.crypto.state=encrypted ro.crypto.type=file; do
+# Bring-up: adb without RSA authorization, as root, from early boot.
+for p in ro.crypto.state=encrypted ro.crypto.type=file ro.adb.secure=0 persist.sys.usb.config=adb; do
     n=${p%%=*}
     if grep -q "^${n}=" "$prop"; then sed -i "s/^${n}=.*/${p}/" "$prop"; else printf '%s\n' "$p" >> "$prop"; fi
 done
