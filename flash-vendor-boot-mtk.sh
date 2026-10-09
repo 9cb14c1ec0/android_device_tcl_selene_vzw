@@ -7,12 +7,23 @@
 #   flash-vendor-boot-mtk.sh <image>        # flash
 #   flash-vendor-boot-mtk.sh --restore      # flash stock vendor_boot_a.bin
 #
-# Only slot A is ever touched. Requires typing YES.
+# Configuration (environment):
+#   STOCK      stock vendor_boot_a.bin dump (restore image; required)
+#   STOCK_SHA  expected sha256 of $STOCK (default: the 4PEN dump below)
+#   MTKCLIENT  mtkclient checkout (default: ~/mtkclient)
+#   PY         python with mtkclient installed (default: $MTKCLIENT/.venv/bin/python)
+#   RUNNER     mtkclient entry point; must accept `w <partition> <file>`.
+#              Default: $MTKCLIENT/mtk.py. On this SoC the DA needs an SLA
+#              bypass; point RUNNER at a wrapper that applies it.
+#
+# Only slot A is ever touched. Requires typing YES. If TWRP is already
+# running, flashing from it is simpler: see README ("Flash from TWRP").
 set -euo pipefail
-STOCK=/home/android/tcltab8attempt2/dump/firmware/vendor_boot_a.bin
-STOCK_SHA=b3fc1cd458712d97ff3765430a74eaddeadb4f16efb212cb479d9df9fcc6ff33
-RUNNER=/home/android/tcltab8attempt2/exploit/run_heapbait_mtk.py
-PY=/home/android/mtkclient_fresh/.venv/bin/python
+: "${STOCK:?set STOCK to your stock vendor_boot_a.bin dump}"
+STOCK_SHA=${STOCK_SHA:-b3fc1cd458712d97ff3765430a74eaddeadb4f16efb212cb479d9df9fcc6ff33}
+MTKCLIENT=${MTKCLIENT:-$HOME/mtkclient}
+PY=${PY:-$MTKCLIENT/.venv/bin/python}
+RUNNER=${RUNNER:-$MTKCLIENT/mtk.py}
 
 img=${1:?usage: $0 <image>|--restore}
 [ "$img" = --restore ] && img=$STOCK
@@ -28,5 +39,5 @@ echo "  sha256 $(sha256sum "$img" | cut -d' ' -f1)"
 echo "  -> vendor_boot_a (restore image: $STOCK)"
 read -r -p "Type YES to continue: " ok
 [ "$ok" = YES ] || exit 1
-cd /home/android/mtkclient_fresh
+cd "$MTKCLIENT"
 exec "$PY" "$RUNNER" w vendor_boot_a "$img"

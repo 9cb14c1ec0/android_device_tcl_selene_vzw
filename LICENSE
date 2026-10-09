@@ -1,0 +1,13 @@
+Device makefiles, sepolicy, scripts, init files, fstab, and patches in
+this repository are licensed under the Apache License, Version 2.0
+(the "License"); you may not use those files except in compliance with
+the License.
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+The prebuilt kernel, DTB, DTBO, and stock vendor ramdisk under prebuilt/,
+and the Trustonic/MediaTek/TCL binaries, shared libraries, Trusted
+Applications (mcRegistry), and VINTF fragments under recovery/root/vendor/
+are proprietary TCL, MediaTek, Trustonic and/or Google files extracted
+from stock 8189S (selene_vzw, 4PEN) firmware. They are included only so
+this TWRP tree can be reproduced and are not licensed under Apache-2.0.

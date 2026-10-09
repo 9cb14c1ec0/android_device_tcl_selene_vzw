@@ -37,39 +37,73 @@ mkbootimg/avbtool parameters are exactly stock.
 
 ## Build
 
+Uses the minimal TWRP 14.1 manifest. ~150 GB free disk recommended.
+
 ```bash
-cd /home/android/tcltab8attempt2/twrp-14.1
-device/tcl/selene_vzw/apply-patches.sh      # once
+mkdir twrp-14.1 && cd twrp-14.1
+repo init --depth=1 \
+  -u https://github.com/minimal-manifest-twrp/platform_manifest_twrp_aosp.git \
+  -b twrp-14.1
+repo sync -c -j$(nproc)
+git clone https://github.com/9cb14c1ec0/android_device_tcl_selene_vzw.git \
+  device/tcl/selene_vzw
+
+device/tcl/selene_vzw/apply-patches.sh      # once (bootable/recovery, vold, logd, keystore2, build)
 export ALLOW_MISSING_DEPENDENCIES=true
 . build/envsetup.sh
-lunch twrp_selene_vzw-ap2a-eng
+lunch twrp_selene_vzw-ap2a-eng              # do not pipe lunch; the env is lost
 m vendorbootimage -j$(nproc)
 device/tcl/selene_vzw/repack-stock-vendor-boot.sh
 # -> out/target/product/selene_vzw/vendor_boot-twrp-selene_vzw.img
 ```
 
-`m vendorbootimage` alone is not the flashable image.
+`m vendorbootimage` alone is not the flashable image; the repack script
+merges TWRP's recovery root into the stock vendor ramdisk layout, packs it
+with the stock header/DTB/cmdline and adds the stock-format AVB footer.
+`--enforcing` omits the bring-up `androidboot.selinux=permissive` cmdline.
 
-## Flash (slot A only, via mtkclient — no fastboot on this build)
+If you change libraries that TWRP copies into the recovery root (e.g. the
+pixel format in `libminuitwrp`), delete
+`out/target/product/selene_vzw/recovery/root/relink_*-timestamp` first;
+TWRP's copy step does not track library changes.
+
+## Flash
+
+**Slot A only.** The bootloader must be unlocked (orange state). Keep a
+dump of your stock `vendor_boot_a` (and ideally `vbmeta_a`) before
+flashing anything. The vendor_boot digest in `vbmeta_a` will not match;
+unlocked LK warns and continues.
+
+### From a running TWRP (simplest)
 
 ```bash
-device/tcl/selene_vzw/flash-vendor-boot-mtk.sh out/target/product/selene_vzw/vendor_boot-twrp-selene_vzw.img
-# restore:
-device/tcl/selene_vzw/flash-vendor-boot-mtk.sh --restore
+device/tcl/selene_vzw/flash-vendor-boot-twrp.sh \
+  out/target/product/selene_vzw/vendor_boot-twrp-selene_vzw.img
+```
+
+Pushes the image, writes `vendor_boot_a` with `dd`, verifies it by reading
+it back, and reboots to recovery.
+
+### First install (no TWRP yet): mtkclient
+
+This carrier build has no usable fastboot. `flash-vendor-boot-mtk.sh`
+writes `vendor_boot_a` through mtkclient's DA. On this SoC the DA requires
+an SLA bypass; set `RUNNER` to a wrapper that applies it (see the script
+header for `STOCK`, `MTKCLIENT`, `PY`, `RUNNER`).
+
+```bash
+STOCK=/path/to/vendor_boot_a.bin \
+  device/tcl/selene_vzw/flash-vendor-boot-mtk.sh out/target/product/selene_vzw/vendor_boot-twrp-selene_vzw.img
+# restore stock:
+STOCK=/path/to/vendor_boot_a.bin device/tcl/selene_vzw/flash-vendor-boot-mtk.sh --restore
 ```
 
 Start the script with the device in Android, then `adb reboot bootloader`
 so the ~4 s preloader window is caught. Afterwards force-reboot
-(Power+VolUp ~12 s), then `adb reboot recovery`.
+(Power+VolUp ~12 s), confirm Android still boots, then `adb reboot recovery`.
 
-The vendor_boot digest in `vbmeta_a` will not match. With the bootloader
-unlocked (orange state) LK should warn and continue; if it refuses, the next
-step is a vbmeta with verification disabled.
-
-Suggested order on hardware:
-1. flash `vendor_boot-stock-roundtrip.img` (== stock) — trivially safe, proves the flashing path;
-2. flash the TWRP image, confirm **normal Android still boots**;
-3. `adb reboot recovery`.
+ADB in recovery is root and unauthenticated from early boot (~14 s), so it
+works even if the UI does not.
 
 ## Decryption notes
 
@@ -91,8 +125,27 @@ Suggested order on hardware:
 - Rebooting with SELinux enforcing hangs (misc write denied); the image is
   permissive so this no longer happens.
 
+## Do not
+
+- Format `/data` or `/metadata` from this TWRP unless you mean to lose
+  everything; decryption depends on the existing keys.
+- Flash `vendor_boot_b`; slot B is the stock fallback.
+
 ## Next steps / known gaps
 
 - Re-enable MTP (ffs.mtp + ffs.adb bind dropped USB).
 - PIN/pattern decryption (gatekeeper path) untested.
 - Write real sepolicy and drop the permissive cmdline.
+
+## License
+
+See `LICENSE`. Makefiles, scripts, init files and patches are Apache-2.0.
+The prebuilt kernel/DTB/vendor ramdisk and the Trustonic/MediaTek/TCL
+blobs are proprietary files extracted from stock firmware, redistributed
+only so this recovery can be reproduced.
+
+## Credits
+
+Crypto/vold/keystore2/logd patches and the vendor_boot repack approach are
+adapted from the TB305FU port
+([android_device_lenovo_clove_row_wifi](https://github.com/9cb14c1ec0/android_device_lenovo_clove_row_wifi)).
