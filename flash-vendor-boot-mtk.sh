@@ -17,6 +17,7 @@ PY=/home/android/mtkclient_fresh/.venv/bin/python
 img=${1:?usage: $0 <image>|--restore}
 [ "$img" = --restore ] && img=$STOCK
 test -f "$img"
+img=$(realpath "$img")   # runner cds into mtkclient
 size=$(stat -c %s "$img")
 [ "$size" -eq 67108864 ] || { echo "refusing: $img is $size bytes, expected 67108864" >&2; exit 1; }
 head -c 8 "$img" | grep -q VNDRBOOT || { echo "refusing: not a vendor_boot image" >&2; exit 1; }
