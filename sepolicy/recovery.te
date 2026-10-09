@@ -1,0 +1,4 @@
+# Bring-up: the kernel cmdline comes from LK, so androidboot.selinux=permissive
+# cannot be injected. Keep the recovery domain permissive until a proper
+# policy is written (eng builds only).
+permissive recovery;

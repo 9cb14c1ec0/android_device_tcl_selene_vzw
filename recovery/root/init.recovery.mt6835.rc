@@ -1,0 +1,22 @@
+# Based on stock vendor_boot init.recovery.mt6835.rc (selene_vzw).
+
+on init
+    setprop sys.usb.configfs 1
+    setprop sys.usb.controller "11201000.usb0"
+    setprop vendor.usb.controller "11201000.usb0"
+    mkdir /mnt/vendor 0755 root system
+    mkdir /mnt/vendor/persist 0771 system system
+    mkdir /mnt/vendor/nvdata 0771 system system
+    mkdir /mnt/vendor/nvcfg 0771 system system
+    mkdir /mnt/vendor/protect_f 0771 system system
+    mkdir /mnt/vendor/protect_s 0771 system system
+
+on post-fs
+    # A/B eMMC boot regions (stock)
+    symlink /dev/block/mmcblk0boot0 /dev/block/by-name/preloader_a
+    symlink /dev/block/mmcblk0boot1 /dev/block/by-name/preloader_b
+    symlink /dev/block/by-name/preloader_a /dev/block/by-name/preloader_emmc_a
+    symlink /dev/block/by-name/preloader_b /dev/block/by-name/preloader_emmc_b
+
+on boot
+    write /sys/class/leds/lcd-backlight/brightness 120

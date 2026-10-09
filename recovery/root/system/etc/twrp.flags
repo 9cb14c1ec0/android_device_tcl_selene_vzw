@@ -1,0 +1,16 @@
+# Extra TWRP partitions for selene_vzw (backup/display only; not mounted at boot)
+/persist      ext4  /dev/block/by-name/persist      flags=display="Persist";backup=1
+/oempersist   ext4  /dev/block/by-name/oempersist   flags=display="OEM Persist";backup=1
+/protect_f    ext4  /dev/block/by-name/protect1     flags=display="Protect_f";backup=1
+/protect_s    ext4  /dev/block/by-name/protect2     flags=display="Protect_s";backup=1
+/nvdata       ext4  /dev/block/by-name/nvdata       flags=display="NVData";backup=1
+/nvcfg        ext4  /dev/block/by-name/nvcfg        flags=display="NVCfg";backup=1
+/nvram        emmc  /dev/block/by-name/nvram        flags=display="NVRAM";backup=1;flashimg=1
+/proinfo      emmc  /dev/block/by-name/proinfo      flags=display="Proinfo";backup=1
+/seccfg       emmc  /dev/block/by-name/seccfg       flags=display="Seccfg";backup=1
+/frp          emmc  /dev/block/by-name/frp          flags=display="FRP";backup=1
+/lk           emmc  /dev/block/by-name/lk           flags=display="LK";backup=1;slotselect
+/logo         emmc  /dev/block/by-name/logo         flags=display="Logo";backup=1;flashimg=1;slotselect
+/md1img       emmc  /dev/block/by-name/md1img       flags=display="Modem";backup=1;slotselect
+/tee          emmc  /dev/block/by-name/tee          flags=display="TEE";backup=1;slotselect
+/super        emmc  /dev/block/by-name/super        flags=display="Super";backup=1;flashimg=1

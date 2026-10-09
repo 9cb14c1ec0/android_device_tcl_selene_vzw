@@ -1,0 +1,55 @@
+diff --git a/libpixelflinger/codeflinger/CodeCache.cpp b/libpixelflinger/codeflinger/CodeCache.cpp
+index 7d40158..5295eb9 100644
+--- a/libpixelflinger/codeflinger/CodeCache.cpp
++++ b/libpixelflinger/codeflinger/CodeCache.cpp
+@@ -83,18 +83,15 @@ const size_t kMaxCodeCacheCapacity = 1024 * 1024;
+ static mspace getMspace()
+ {
+     if (gExecutableStore == NULL) {
+-        int fd = ashmem_create_region("CodeFlinger code cache",
+-                                      kMaxCodeCacheCapacity);
+-        LOG_ALWAYS_FATAL_IF(fd < 0,
+-                            "Creating code cache, ashmem_create_region "
+-                            "failed with error '%s'", strerror(errno));
++        // Modern kernels can prohibit executable mappings backed by ashmem.
++        // This cache is private to recovery, so anonymous memory is sufficient
++        // and is governed by recovery's SELinux execmem permission.
+         gExecutableStore = mmap(NULL, kMaxCodeCacheCapacity,
+                                 PROT_READ | PROT_WRITE | PROT_EXEC,
+-                                MAP_PRIVATE, fd, 0);
++                                MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
+         LOG_ALWAYS_FATAL_IF(gExecutableStore == MAP_FAILED,
+                             "Creating code cache, mmap failed with error "
+                             "'%s'", strerror(errno));
+-        close(fd);
+         gMspace = create_mspace_with_base(gExecutableStore, kMaxCodeCacheCapacity,
+                                           /*locked=*/ false);
+         mspace_set_footprint_limit(gMspace, kMaxCodeCacheCapacity);
+diff --git a/minuitwrp/events.cpp b/minuitwrp/events.cpp
+index e497df6..40f81c1 100644
+--- a/minuitwrp/events.cpp
++++ b/minuitwrp/events.cpp
+@@ -558,7 +558,10 @@ static int vk_modify(struct ev *e, struct input_event *ev)
+                 // We're in a touch release, although some devices will still send positions as well
+                 e->mt_p.x = 0;
+                 e->mt_p.y = 0;
+-                touchReleaseOnNextSynReport = 1;
++                // A type-B tracking-id release may be followed by this event
++                // before SYN_REPORT. Do not downgrade that confirmed release.
++                if (touchReleaseOnNextSynReport != 2)
++                    touchReleaseOnNextSynReport = 1;
+ #endif
+             }
+ #ifdef _EVENT_LOGGING
+@@ -572,7 +575,10 @@ static int vk_modify(struct ev *e, struct input_event *ev)
+                 // We're in a touch release, although some devices will still send positions as well
+                 e->mt_p.x = 0;
+                 e->mt_p.y = 0;
+-                touchReleaseOnNextSynReport = 1;
++                // Preserve a preceding ABS_MT_TRACKING_ID=-1 release. Some
++                // ILITEK drivers report pressure zero later in the same frame.
++                if (touchReleaseOnNextSynReport != 2)
++                    touchReleaseOnNextSynReport = 1;
+             }
+ #ifdef _EVENT_LOGGING
+             printf("EV: %s => EV_ABS  ABS_MT_PRESSURE  %d\n", e->deviceName, ev->value);
