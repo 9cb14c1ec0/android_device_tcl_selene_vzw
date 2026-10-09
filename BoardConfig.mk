@@ -138,7 +138,9 @@ BOARD_SEPOLICY_DIRS += $(DEVICE_PATH)/sepolicy
 
 # Recovery
 TARGET_RECOVERY_FSTAB := $(DEVICE_PATH)/recovery.fstab
-TARGET_RECOVERY_PIXEL_FORMAT := BGRA_8888
+# XBGR8888 scanout: MTK DRM honours per-pixel alpha with ARGB8888 (BGRA),
+# which dropped anti-aliased glyph pixels (thin strokes vanished).
+TARGET_RECOVERY_PIXEL_FORMAT := RGBX_8888
 RECOVERY_SDCARD_ON_DATA := true
 BOARD_SUPPRESS_SECURE_ERASE := true
 
@@ -155,9 +157,9 @@ TARGET_SCREEN_WIDTH := 800
 TARGET_SCREEN_HEIGHT := 1340
 TW_FRAMERATE := 60
 TW_BRIGHTNESS_PATH := "/sys/class/leds/lcd-backlight/brightness"
-# Stock DT: lcd-backlight max-brightness = max-hw-brightness = 0x7ff.
-TW_MAX_BRIGHTNESS := 2047
-TW_DEFAULT_BRIGHTNESS := 1400
+# Live sysfs max_brightness is 4095 (DT says 0x7ff; driver rescales).
+TW_MAX_BRIGHTNESS := 4095
+TW_DEFAULT_BRIGHTNESS := 2400
 TW_NO_SCREEN_BLANK := true
 TW_EXTRA_LANGUAGES := true
 TW_DEVICE_VERSION := selene_vzw-8189S

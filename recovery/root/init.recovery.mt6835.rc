@@ -19,4 +19,4 @@ on post-fs
     symlink /dev/block/by-name/preloader_b /dev/block/by-name/preloader_emmc_b
 
 on boot
-    write /sys/class/leds/lcd-backlight/brightness 1400
+    write /sys/class/leds/lcd-backlight/brightness 2400
