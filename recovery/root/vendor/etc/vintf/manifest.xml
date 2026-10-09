@@ -1,0 +1,21 @@
+<!-- Base device manifest for recovery. hwservicemanager/servicemanager
+     ignore manifest/ fragments when this file is missing. HIDL services
+     started for decryption (from stock vendor manifest.xml); KeyMint,
+     SecureClock and SharedSecret use the stock fragments in manifest/. -->
+<manifest version="5.0" type="device" target-level="7">
+    <hal format="hidl">
+        <name>android.hardware.gatekeeper</name>
+        <transport>hwbinder</transport>
+        <fqname>@1.0::IGatekeeper/default</fqname>
+    </hal>
+    <hal format="hidl">
+        <name>vendor.trustonic.tee</name>
+        <transport>hwbinder</transport>
+        <fqname>@1.1::ITee/default</fqname>
+    </hal>
+    <hal format="hidl">
+        <name>vendor.trustonic.tee.tui</name>
+        <transport>hwbinder</transport>
+        <fqname>@1.0::ITui/default</fqname>
+    </hal>
+</manifest>

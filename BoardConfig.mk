@@ -184,11 +184,24 @@ TW_EXCLUDE_APEX := true
 TW_CUSTOM_CPU_TEMP_PATH := "/sys/class/thermal/thermal_zone0/temp"
 TW_BACKUP_EXCLUSIONS := /data/fonts
 
-# Crypto: stock /data is FBE v2 + metadata encryption via Trustonic TEE
-# (ro.hardware.kmsetkey/gatekeeper=trustonic). Off for the first boot
-# milestone; enabling it needs the Trustonic mcDriverDaemon + keymint/
-# keymaster HAL blobs from vendor (see README "Next steps").
-TW_INCLUDE_CRYPTO := false
+# Crypto: /data is FBE v2 + metadata encryption (dm-default-key) on a
+# Trustonic TEE. Recovery runs mcDriverDaemon + the stock Trustonic KeyMint 2
+# (AIDL) and Gatekeeper 1.0 (HIDL) from recovery/root/vendor, started by
+# init.recovery.mt6835.rc. stamp-recovery-props.sh reports OS 15 /
+# 2026-05-05 so KeyMint sees the same versions as Android (a mismatch can
+# trigger key upgrades that Android cannot use).
+TW_INCLUDE_CRYPTO := true
+TW_INCLUDE_CRYPTO_FBE := true
+TW_INCLUDE_FBE_METADATA_DECRYPT := true
+TW_USE_FSCRYPT_POLICY := 2
+TW_EXCLUDE_ENCRYPTED_BACKUPS := true
+# TWRP passes /etc/additional.fstab to vold as the zoned device, which moves
+# the metadata key lookup to metadata_encryption/default/key (stock key is
+# metadata_encryption/key) and duplicates /metadata with /data's flags.
+TW_SKIP_ADDITIONAL_FSTAB := true
+VENDOR_SECURITY_PATCH := 2026-05-05
+BOOT_SECURITY_PATCH := 2026-05-05
+
 
 # Debug
 TWRP_INCLUDE_LOGCAT := true

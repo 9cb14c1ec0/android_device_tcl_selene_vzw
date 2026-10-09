@@ -1,0 +1,5 @@
+<!-- Base framework manifest for recovery: without it servicemanager ignores
+     manifest/android.system.keystore2-service.xml and keystore2 cannot
+     register IKeystoreService/default. -->
+<manifest version="5.0" type="framework">
+</manifest>

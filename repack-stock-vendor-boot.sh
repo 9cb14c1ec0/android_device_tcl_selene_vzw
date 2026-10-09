@@ -13,15 +13,19 @@
 #   device/tcl/selene_vzw/repack-stock-vendor-boot.sh --stock    # round-trip
 #        the unmodified stock ramdisk through this pipeline (validates that
 #        LK accepts our mkbootimg/avbtool output before risking TWRP)
-#   --permissive   add androidboot.selinux=permissive as vendor bootconfig
+#   --enforcing    omit the default bring-up androidboot.selinux=permissive
+#                  on the vendor cmdline (only honoured by TWRP's eng init;
+#                  stock user init in normal boot ignores it). LK drops the
+#                  vendor bootconfig section, so the cmdline is used.
 set -euo pipefail
 
 mode=twrp
-permissive=0
+permissive=1
 for arg in "$@"; do
     case $arg in
         --stock) mode=stock ;;
         --permissive) permissive=1 ;;
+        --enforcing) permissive=0 ;;
         *) echo "unknown arg $arg" >&2; exit 2 ;;
     esac
 done
@@ -66,10 +70,9 @@ else
     lz4 -l -12 --favor-decSpeed -f "$work/merged.cpio" "$work/ramdisk.lz4" >/dev/null
 fi
 
-bootconfig_args=()
-if [ "$permissive" = 1 ]; then
-    printf 'androidboot.selinux=permissive\n' > "$work/bootconfig"
-    bootconfig_args=(--vendor_bootconfig "$work/bootconfig")
+vendor_cmdline='bootopt=64S3,32N2,64N2'
+if [ "$permissive" = 1 ] && [ "$mode" != stock ]; then
+    vendor_cmdline="$vendor_cmdline androidboot.selinux=permissive"
 fi
 
 # Values from unpack_bootimg --format=mkbootimg on stock vendor_boot_a.
@@ -81,10 +84,9 @@ $mkbootimg \
     --ramdisk_offset 0x66f00000 \
     --tags_offset 0x47c80000 \
     --dtb_offset 0x0000000047c80000 \
-    --vendor_cmdline 'bootopt=64S3,32N2,64N2' \
+    --vendor_cmdline "$vendor_cmdline" \
     --board '' \
     --dtb "$device/prebuilt/dtb.img" \
-    "${bootconfig_args[@]}" \
     --ramdisk_type 1 --ramdisk_name '' \
     --vendor_ramdisk_fragment "$work/ramdisk.lz4" \
     --vendor_boot "$work/vendor_boot-unsigned.img"

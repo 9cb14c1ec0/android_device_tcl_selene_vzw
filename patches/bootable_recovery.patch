@@ -1,3 +1,90 @@
+diff --git a/Android.mk b/Android.mk
+index 78b9430..4bd0bd4 100755
+--- a/Android.mk
++++ b/Android.mk
+@@ -334,21 +334,22 @@ ifeq ($(TW_INCLUDE_CRYPTO), true)
+     TW_INCLUDE_CRYPTO_FBE := true
+     LOCAL_CFLAGS += -DTW_INCLUDE_FBE
+     LOCAL_SHARED_LIBRARIES += android.frameworks.stats@1.0 android.hardware.authsecret@1.0 \
+-	android.security.authorization-ndk_platform \
++	android.security.authorization-ndk \
+         android.hardware.oemlock@1.0 libf2fs_sparseblock \
+         libandroidicu.recovery \
++        android.hardware.gatekeeper-V1-ndk \
+         android.hardware.gatekeeper@1.0 \
+         android.hardware.weaver@1.0 \
+         android.frameworks.stats@1.0 \
+-        android.security.maintenance-ndk_platform \
+-        android.system.keystore2-V1-ndk_platform \
++        android.security.maintenance-ndk \
++        android.system.keystore2-V1-ndk \
+         libkeyutils \
+         liblog \
+         libsqlite.recovery \
+         libkeystoreinfo.recovery \
+         libgatekeeper_aidl
+ 
+-    LOCAL_STATIC_LIBRARIES += libkeymint_support
++    LOCAL_STATIC_LIBRARIES += libkeymint_support libscrypt_static
+ 
+     LOCAL_CFLAGS += -DTW_INCLUDE_FBE_METADATA_DECRYPT
+ 
+@@ -392,7 +393,7 @@ endif
+ ifneq ($(TW_CUSTOM_CPU_TEMP_PATH),)
+ 	LOCAL_CFLAGS += -DTW_CUSTOM_CPU_TEMP_PATH=$(TW_CUSTOM_CPU_TEMP_PATH)
+ endif
+-ifneq ($(TW_EXCLUDE_ENCRYPTED_BACKUPS),)
++ifeq ($(TW_EXCLUDE_ENCRYPTED_BACKUPS),)
+     LOCAL_SHARED_LIBRARIES += libopenaes
+ else
+     LOCAL_CFLAGS += -DTW_EXCLUDE_ENCRYPTED_BACKUPS
+@@ -581,7 +582,7 @@ endif
+ ifeq ($(BOARD_HAS_NO_REAL_SDCARD),)
+     TWRP_REQUIRED_MODULES += sgdisk
+ endif
+-ifneq ($(TW_EXCLUDE_ENCRYPTED_BACKUPS),)
++ifeq ($(TW_EXCLUDE_ENCRYPTED_BACKUPS),)
+     TWRP_REQUIRED_MODULES += openaes openaes_license
+ endif
+ ifeq ($(TW_INCLUDE_FB2PNG), true)
+diff --git a/etc/init.recovery.logd.rc b/etc/init.recovery.logd.rc
+index ed41391..80d2265 100644
+--- a/etc/init.recovery.logd.rc
++++ b/etc/init.recovery.logd.rc
+@@ -10,4 +10,4 @@ service logd /system/bin/logd
+     user root
+     group root
+     capabilities SYSLOG AUDIT_CONTROL SETGID SETUID
+-    seclabel u:r:logd:s0
++    seclabel u:r:recovery:s0
+diff --git a/etc/init/keystore2.rc b/etc/init/keystore2.rc
+index fa62662..30d63ba 100644
+--- a/etc/init/keystore2.rc
++++ b/etc/init/keystore2.rc
+@@ -15,3 +15,4 @@ service keystore2 /system/bin/keystore2 /tmp/misc/keystore
+     group keystore readproc log
+     writepid /dev/cpuset/foreground/tasks
+     seclabel u:r:recovery:s0
++    stdio_to_kmsg
+diff --git a/gui/gui.cpp b/gui/gui.cpp
+index 874cdd9..bc0ccfe 100755
+--- a/gui/gui.cpp
++++ b/gui/gui.cpp
+@@ -416,12 +416,12 @@ static void setup_ors_command()
+ 
+ 	unlink(ORS_INPUT_FILE);
+ 	if (mkfifo(ORS_INPUT_FILE, 06660) != 0) {
+-		LOGINFO("Unable to mkfifo %s\n", ORS_INPUT_FILE);
++		LOGINFO("Unable to mkfifo %s: %s\n", ORS_INPUT_FILE, strerror(errno));
+ 		return;
+ 	}
+ 	unlink(ORS_OUTPUT_FILE);
+ 	if (mkfifo(ORS_OUTPUT_FILE, 06666) != 0) {
+-		LOGINFO("Unable to mkfifo %s\n", ORS_OUTPUT_FILE);
++		LOGINFO("Unable to mkfifo %s: %s\n", ORS_OUTPUT_FILE, strerror(errno));
+ 		unlink(ORS_INPUT_FILE);
+ 		return;
+ 	}
 diff --git a/libpixelflinger/codeflinger/CodeCache.cpp b/libpixelflinger/codeflinger/CodeCache.cpp
 index 7d40158..5295eb9 100644
 --- a/libpixelflinger/codeflinger/CodeCache.cpp
@@ -25,6 +112,111 @@ index 7d40158..5295eb9 100644
          gMspace = create_mspace_with_base(gExecutableStore, kMaxCodeCacheCapacity,
                                            /*locked=*/ false);
          mspace_set_footprint_limit(gMspace, kMaxCodeCacheCapacity);
+diff --git a/libtar/Android.mk b/libtar/Android.mk
+index c3bb691..20ef6b0 100755
+--- a/libtar/Android.mk
++++ b/libtar/Android.mk
+@@ -14,6 +14,7 @@ LOCAL_C_INCLUDES += external/libselinux/include
+ LOCAL_SHARED_LIBRARIES += libselinux
+ 
+ ifeq ($(TW_INCLUDE_CRYPTO_FBE), true)
++ifeq ($(TW_EXCLUDE_ENCRYPTED_BACKUPS),)
+     LOCAL_STATIC_LIBRARIES += libvold libscrypt_static
+     LOCAL_SHARED_LIBRARIES +=  \
+         android.hardware.boot@1.0 \
+@@ -23,10 +24,10 @@ ifeq ($(TW_INCLUDE_CRYPTO_FBE), true)
+         android.hardware.keymaster@4.0 \
+         android.hardware.keymaster@4.1 \
+         android.hardware.weaver@1.0 \
+-        android.security.apc-ndk_platform \
+-        android.system.keystore2-V1-ndk_platform \
+-        android.security.authorization-ndk_platform \
+-        android.security.maintenance-ndk_platform \
++        android.security.apc-ndk \
++        android.system.keystore2-V1-ndk \
++        android.security.authorization-ndk \
++        android.security.maintenance-ndk \
+         libselinux \
+         libbinder_ndk \
+         libext4_utils \
+@@ -63,6 +64,7 @@ ifeq ($(TW_INCLUDE_CRYPTO_FBE), true)
+     endif
+     LOCAL_C_INCLUDES += system/vold
+ endif
++endif
+ 
+ ifeq ($(TW_LIBTAR_DEBUG),true)
+     LOCAL_CFLAGS += -DTW_LIBTAR_DEBUG
+@@ -84,9 +86,11 @@ LOCAL_C_INCLUDES += external/libselinux/include
+ LOCAL_STATIC_LIBRARIES += libselinux
+ 
+ ifeq ($(TW_INCLUDE_CRYPTO_FBE), true)
++ifeq ($(TW_EXCLUDE_ENCRYPTED_BACKUPS),)
+     LOCAL_CFLAGS += -DUSE_FSCRYPT
+     LOCAL_C_INCLUDES += system/vold
+ endif
++endif
+ 
+ ifeq ($(TW_LIBTAR_DEBUG),true)
+     LOCAL_CFLAGS += -DTW_LIBTAR_DEBUG
+diff --git a/libtar/append.c b/libtar/append.c
+index 225ae1a..aeeba70 100755
+--- a/libtar/append.c
++++ b/libtar/append.c
+@@ -143,7 +143,7 @@ tar_append_file(TAR *t, const char *realname, const char *savename)
+ 			free(t->th_buf.fep);
+ 			t->th_buf.fep = NULL;
+ 		}
+-		t->th_buf.fep = (fscrypt_policy *)malloc(sizeof(fscrypt_policy));
++		t->th_buf.fep = malloc(sizeof(*t->th_buf.fep));
+ 		if (!t->th_buf.fep) {
+ 			LOG("malloc fs_encryption_policy\n");
+ 			return -1;
+@@ -473,4 +473,3 @@ tar_append_buffer(TAR *t, void *buf, size_t len)
+ 
+ 	return 0;
+ }
+-
+diff --git a/libtar/block.c b/libtar/block.c
+index aaedc8e..731538b 100755
+--- a/libtar/block.c
++++ b/libtar/block.c
+@@ -354,7 +354,7 @@ th_read(TAR *t)
+ #ifdef USE_FSCRYPT
+ 			start = strstr(buf, FSCRYPT_TAG);
+ 			if (start && start+FSCRYPT_TAG_LEN < buf+len) {
+-				t->th_buf.fep = (fscrypt_policy*)malloc(sizeof(fscrypt_policy));
++				t->th_buf.fep = malloc(sizeof(*t->th_buf.fep));
+ 				if (!t->th_buf.fep) {
+ 					LOG("malloc failed for fscrypt policy\n");
+ 					return -1;
+@@ -724,4 +724,3 @@ th_write(TAR *t)
+ 	return 0;
+ }
+ 
+-
+diff --git a/libtar/libtar.h b/libtar/libtar.h
+index f42b201..4d2d995 100755
+--- a/libtar/libtar.h
++++ b/libtar/libtar.h
+@@ -71,7 +71,11 @@ struct tar_header
+ 	char *gnu_longlink;
+ 	char *selinux_context;
+ #ifdef USE_FSCRYPT
+-	fscrypt_policy  *fep;
++#ifdef USE_FSCRYPT_POLICY_V1
++	struct fscrypt_policy_v1 *fep;
++#else
++	struct fscrypt_policy_v2 *fep;
++#endif
+ #endif
+ 	int has_cap_data;
+ 	struct vfs_cap_data cap_data;
+@@ -355,4 +359,3 @@ int tar_find(TAR *t, char *searchstr);
+ #endif
+ 
+ #endif /* ! LIBTAR_H */
+-
 diff --git a/minuitwrp/events.cpp b/minuitwrp/events.cpp
 index e497df6..40f81c1 100644
 --- a/minuitwrp/events.cpp
@@ -53,3 +245,174 @@ index e497df6..40f81c1 100644
              }
  #ifdef _EVENT_LOGGING
              printf("EV: %s => EV_ABS  ABS_MT_PRESSURE  %d\n", e->deviceName, ev->value);
+diff --git a/orscmd/orscmd.h b/orscmd/orscmd.h
+index e88d9a5..f9611cd 100755
+--- a/orscmd/orscmd.h
++++ b/orscmd/orscmd.h
+@@ -16,7 +16,7 @@
+ #ifndef __ORSCMD_H
+ #define __ORSCMD_H
+ 
+-#define ORS_INPUT_FILE "/system/bin/orsin"
+-#define ORS_OUTPUT_FILE "/system/bin/orsout"
++#define ORS_INPUT_FILE "/tmp/orsin"
++#define ORS_OUTPUT_FILE "/tmp/orsout"
+ 
+ #endif //__ORSCMD_H
+diff --git a/partition.cpp b/partition.cpp
+index 8c53567..246b961 100755
+--- a/partition.cpp
++++ b/partition.cpp
+@@ -708,6 +708,7 @@ void TWPartition::Setup_Data_Partition(bool Display_Error) {
+ 	} else if (!Mount(false)) {
+ 		if (Is_Present) {
+ 			if (Key_Directory.empty()) {
++#ifndef TW_INCLUDE_FBE
+ 				set_partition_data(Use_Original_Path ? Original_Path.c_str() : Actual_Block_Device.c_str(), Crypto_Key_Location.c_str());
+ 				if (cryptfs_check_footer() == 0) {
+ 					Is_Encrypted = true;
+@@ -724,6 +725,9 @@ void TWPartition::Setup_Data_Partition(bool Display_Error) {
+ 				} else {
+ 					gui_err("mount_data_footer=Could not mount /data and unable to find crypto footer.");
+ 				}
++#else
++				gui_err("mount_data_metadata=Could not mount /data and no metadata encryption key directory was specified.");
++#endif
+ 			} else {
+ 				Is_Encrypted = true;
+ 				Is_Decrypted = false;
+@@ -2159,11 +2163,13 @@ bool TWPartition::Wipe_Encryption() {
+ #ifdef TW_INCLUDE_CRYPTO
+ 	if (!UnMount(true))
+ 		return false;
++#ifndef TW_INCLUDE_FBE
+ 	if (Is_Decrypted && !Decrypted_Block_Device.empty()) {
+ 		if (delete_crypto_blk_dev((char*)("userdata")) != 0) {
+ 			LOGERR("Error deleting crypto block device, continuing anyway.\n");
+ 		}
+ 	}
++#endif
+ #endif
+ 	Has_Data_Media = false;
+ 	Decrypted_Block_Device = "";
+diff --git a/partitionmanager.cpp b/partitionmanager.cpp
+index 171fecc..764b377 100755
+--- a/partitionmanager.cpp
++++ b/partitionmanager.cpp
+@@ -596,7 +596,14 @@ void TWPartitionManager::Decrypt_Data() {
+ #ifdef TW_INCLUDE_FBE_METADATA_DECRYPT
+ #ifdef USE_FSCRYPT
+ 			if (android::vold::fscrypt_mount_metadata_encrypted(Decrypt_Data->Actual_Block_Device, Decrypt_Data->Mount_Point, false, false, Decrypt_Data->Current_File_System, TWFunc::Path_Exists(additional_fstab) ? additional_fstab : "")) {
+-				std::string crypto_blkdev = android::base::GetProperty("ro.crypto.fs_crypto_blkdev", "error");
++				// MetadataCrypt names the dm-default-key device "userdata".
++				// Recovery cannot set ro.* after boot (error 0x18), so the
++				// property read below is often empty even when unwrap worked.
++				std::string crypto_blkdev = android::base::GetProperty("ro.crypto.fs_crypto_blkdev", "");
++				if (crypto_blkdev.empty() || crypto_blkdev == "error") {
++					if (TWFunc::Path_Exists("/dev/block/mapper/userdata"))
++						crypto_blkdev = "/dev/block/mapper/userdata";
++				}
+ 				Decrypt_Data->Decrypted_Block_Device = crypto_blkdev;
+ 				LOGINFO("Successfully decrypted metadata encrypted data partition with new block device: '%s'\n", crypto_blkdev.c_str());
+ #endif
+@@ -629,6 +636,7 @@ void TWPartitionManager::Decrypt_Data() {
+ 				}
+ 			}
+ 		} else {
++#ifndef TW_INCLUDE_FBE
+ 			LOGINFO("FBE setup failed. Trying FDE...\n");
+ 			Set_Crypto_State();
+ 			Set_Crypto_Type("block");
+@@ -645,6 +653,9 @@ void TWPartitionManager::Decrypt_Data() {
+ 				DataManager::SetValue("TW_CRYPTO_TYPE", password_type);
+ 				DataManager::SetValue("tw_crypto_pwtype_0", password_type);
+ 			}
++#else
++			LOGERR("FBE metadata setup failed; legacy FDE is not available in this build.\n");
++#endif
+ 		}
+ 	}
+ 	if (Decrypt_Data && (!Decrypt_Data->Is_Encrypted || Decrypt_Data->Is_Decrypted)) {
+@@ -2168,6 +2179,7 @@ int TWPartitionManager::Decrypt_Device(string Password, int user_id) {
+ 		return -1;
+ 	}
+ 
++#ifndef TW_INCLUDE_FBE
+ 	char isdecrypteddata[PROPERTY_VALUE_MAX];
+ 	property_get("twrp.decrypt.done", isdecrypteddata, "");
+ 	if (strcmp(isdecrypteddata, "true") == 0) {
+@@ -2215,6 +2227,9 @@ int TWPartitionManager::Decrypt_Device(string Password, int user_id) {
+ 		Post_Decrypt(crypto_blkdev);
+ 	}
+ 	return 0;
++#else
++	return -1;
++#endif
+ #else
+ 	gui_err("no_crypto_support=No crypto support was compiled into this build.");
+ 	return -1;
+diff --git a/prebuilt/Android.mk b/prebuilt/Android.mk
+index f3b7160..729f06f 100755
+--- a/prebuilt/Android.mk
++++ b/prebuilt/Android.mk
+@@ -89,6 +89,7 @@ RECOVERY_BINARY_SOURCE_FILES += $(TARGET_OUT_EXECUTABLES)/keystore
+ RECOVERY_BINARY_SOURCE_FILES += $(TARGET_OUT_EXECUTABLES)/keystore_auth
+ RECOVERY_BINARY_SOURCE_FILES += $(TARGET_OUT_EXECUTABLES)/keystore_cli_v2
+ RECOVERY_BINARY_SOURCE_FILES += $(TARGET_OUT_EXECUTABLES)/hwservicemanager
++RECOVERY_BINARY_SOURCE_FILES += $(TARGET_OUT_SYSTEM_EXT_EXECUTABLES)/hwservicemanager
+ RECOVERY_BINARY_SOURCE_FILES += $(TARGET_OUT_EXECUTABLES)/servicemanager
+ RECOVERY_BINARY_SOURCE_FILES += $(TARGET_OUT_EXECUTABLES)/vold_prepare_subdirs
+ RECOVERY_BINARY_SOURCE_FILES += $(TARGET_OUT_VENDOR_EXECUTABLES)/vndservicemanager
+@@ -191,14 +192,19 @@ ifeq ($(TW_INCLUDE_CRYPTO), true)
+         RECOVERY_LIBRARY_SOURCE_FILES += $(TARGET_OUT_SHARED_LIBRARIES)/libtwrpfscrypt.so
+         RECOVERY_LIBRARY_SOURCE_FILES += $(TARGET_OUT_SHARED_LIBRARIES)/android.security.maintenance-ndk.so
+         RECOVERY_LIBRARY_SOURCE_FILES += $(TARGET_OUT_SHARED_LIBRARIES)/android.system.keystore2-V1-ndk.so
++        RECOVERY_LIBRARY_SOURCE_FILES += $(TARGET_OUT_SHARED_LIBRARIES)/android.system.keystore2-V4-ndk.so
+         RECOVERY_LIBRARY_SOURCE_FILES += $(TARGET_OUT_SHARED_LIBRARIES)/android.security.apc-ndk.so
+         RECOVERY_LIBRARY_SOURCE_FILES += $(TARGET_OUT_SHARED_LIBRARIES)/android.security.authorization-ndk.so
++        RECOVERY_LIBRARY_SOURCE_FILES += $(TARGET_OUT_SHARED_LIBRARIES)/android.security.aaid_aidl-cpp.so
+         RECOVERY_LIBRARY_SOURCE_FILES += $(TARGET_OUT_SHARED_LIBRARIES)/libkeymint_support.so
+         RECOVERY_LIBRARY_SOURCE_FILES += $(TARGET_OUT_SHARED_LIBRARIES)/android.hardware.security.keymint-V1-ndk.so
++        RECOVERY_LIBRARY_SOURCE_FILES += $(TARGET_OUT_SHARED_LIBRARIES)/android.hardware.security.keymint-V3-ndk.so
++        RECOVERY_LIBRARY_SOURCE_FILES += $(TARGET_OUT_SHARED_LIBRARIES)/android.hardware.security.rkp-V3-ndk.so
+         RECOVERY_LIBRARY_SOURCE_FILES += $(TARGET_OUT_SHARED_LIBRARIES)/android.frameworks.stats-V1-ndk.so
+         RECOVERY_LIBRARY_SOURCE_FILES += $(TARGET_OUT_SHARED_LIBRARIES)/android.hardware.security.secureclock-V1-ndk.so
+         RECOVERY_LIBRARY_SOURCE_FILES += $(TARGET_OUT_SHARED_LIBRARIES)/libgatekeeper.so
+         RECOVERY_LIBRARY_SOURCE_FILES += $(TARGET_OUT_SHARED_LIBRARIES)/libgatekeeper_aidl.so
++        RECOVERY_LIBRARY_SOURCE_FILES += $(TARGET_OUT_SHARED_LIBRARIES)/android.hardware.gatekeeper-V1-ndk.so
+         RECOVERY_LIBRARY_SOURCE_FILES += $(TARGET_OUT_SHARED_LIBRARIES)/libkeymaster_messages.so
+         RECOVERY_LIBRARY_SOURCE_FILES += $(TARGET_OUT_SHARED_LIBRARIES)/libbinder.so
+         RECOVERY_LIBRARY_SOURCE_FILES += $(TARGET_OUT_SHARED_LIBRARIES)/libprotobuf-cpp-lite.so
+@@ -206,6 +212,7 @@ ifeq ($(TW_INCLUDE_CRYPTO), true)
+         RECOVERY_LIBRARY_SOURCE_FILES += $(TARGET_OUT_SHARED_LIBRARIES)/android.hardware.gatekeeper@1.0.so
+         RECOVERY_LIBRARY_SOURCE_FILES += $(TARGET_OUT_SHARED_LIBRARIES)/libkeystore2_aaid.so
+         RECOVERY_LIBRARY_SOURCE_FILES += $(TARGET_OUT_SHARED_LIBRARIES)/libkeystore2_apc_compat.so
++        RECOVERY_LIBRARY_SOURCE_FILES += $(TARGET_OUT_SHARED_LIBRARIES)/android.hardware.confirmationui-V1-ndk.so
+         RECOVERY_LIBRARY_SOURCE_FILES += $(TARGET_OUT_SHARED_LIBRARIES)/libkeystore2_crypto.so
+         RECOVERY_LIBRARY_SOURCE_FILES += $(TARGET_OUT_SHARED_LIBRARIES)/libkm_compat_service.so
+         RECOVERY_LIBRARY_SOURCE_FILES += $(TARGET_OUT_SHARED_LIBRARIES)/libkeystore2_vintf_cpp.so
+@@ -301,7 +308,7 @@ endif
+ ifneq ($(wildcard system/core/libsparse/Android.*),)
+     RECOVERY_LIBRARY_SOURCE_FILES += $(TARGET_OUT_SHARED_LIBRARIES)/libsparse.so
+ endif
+-ifneq ($(TW_EXCLUDE_ENCRYPTED_BACKUPS),)
++ifeq ($(TW_EXCLUDE_ENCRYPTED_BACKUPS),)
+     RECOVERY_LIBRARY_SOURCE_FILES += $(TARGET_OUT_SHARED_LIBRARIES)/libopenaes.so
+ endif
+ ifeq ($(TARGET_USERIMAGES_USE_F2FS), true)
+@@ -453,6 +460,7 @@ LOCAL_MODULE_CLASS := EXECUTABLES
+ LOCAL_MODULE_PATH := $(TARGET_RECOVERY_ROOT_OUT)
+ LOCAL_POST_INSTALL_CMD += \
+     mkdir -p $(TARGET_RECOVERY_ROOT_OUT)/sbin; ln -sf /system/bin/sh $(TARGET_RECOVERY_ROOT_OUT)/sbin/sh && \
++    mkdir -p $(TARGET_RECOVERY_ROOT_OUT)/system/bin/bootstrap; ln -sf ../linker64 $(TARGET_RECOVERY_ROOT_OUT)/system/bin/bootstrap/linker64 && \
+     mkdir -p $(TARGET_RECOVERY_ROOT_OUT)/system/etc/selinux/ && \
+     mkdir -p $(TARGET_RECOVERY_ROOT_OUT)/vendor/etc/selinux/ && \
+     mkdir -p $(TARGET_RECOVERY_ROOT_OUT)/system/etc/task_profiles/ && \
+@@ -470,6 +478,7 @@ LOCAL_REQUIRED_MODULES += init_second_stage.recovery \
+     reboot.recovery \
+     plat_service_contexts \
+     plat_hwservice_contexts \
++    task_profiles.json \
+     plat_hardware_contexts \
+     vndservice_contexts \
+     plat_keystore2_key_contexts \

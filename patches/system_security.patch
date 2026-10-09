@@ -1,0 +1,28 @@
+diff --git a/keystore2/src/km_compat/km_compat.cpp b/keystore2/src/km_compat/km_compat.cpp
+index be3ba18..539209e 100644
+--- a/keystore2/src/km_compat/km_compat.cpp
++++ b/keystore2/src/km_compat/km_compat.cpp
+@@ -27,6 +27,7 @@
+ #include <android-base/logging.h>
+ #include <android/hidl/manager/1.2/IServiceManager.h>
+ #include <binder/IServiceManager.h>
++#include <hidl/ServiceManagement.h>
+ #include <hardware/keymaster_defs.h>
+ #include <keymasterV4_1/Keymaster.h>
+ #include <keymasterV4_1/Keymaster3.h>
+@@ -1463,10 +1464,12 @@ KeymasterDevices enumerateKeymasterDevices(IServiceManager* serviceManager) {
+ }
+ 
+ KeymasterDevices initializeKeymasters() {
+-    auto serviceManager = IServiceManager::getService();
++    // Use the hwbinder context manager directly. IServiceManager::getService()
++    // is VINTF-gated and either returns null (AIDL-only skip) or waits forever
++    // for android.hidl.manager@1.2::IServiceManager/default, which
++    // hwservicemanager does not register as a named instance.
++    auto serviceManager = ::android::hardware::defaultServiceManager1_2();
+     if (!serviceManager.get()) {
+-        // New devices no longer have HIDL support, so failing to get hwservicemanager is
+-        // expected behavior.
+         LOG(INFO) << "Skipping keymaster compat, this system is AIDL only.";
+         return KeymasterDevices();
+     }

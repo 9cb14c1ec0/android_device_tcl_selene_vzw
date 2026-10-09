@@ -5,7 +5,11 @@ Verizon TCL TAB 8 NXTPAPER 5G, MediaTek MT6835, eMMC, A/B + Virtual A/B
 Android 15 system on an Android 13 (TP1A, `4PEN`) vendor with an
 **android13-5.15** GKI kernel (vermagic `5.15.180-android13-8`).
 
-Status: **bring-up scaffold** — not yet booted on hardware.
+Status: **boots on hardware** (vendor_boot_a). Working: display (DRM,
+XBGR8888), touch, early unauthenticated root adb, Trustonic TEE + KeyMint 2
++ Gatekeeper + keystore2, **automatic FBE v2 + metadata decryption** (no
+lock screen; PIN/pattern untested). MTP is disabled for bring-up. SELinux is
+permissive in recovery via the vendor cmdline (Android stays enforcing).
 
 ## Boot layout (read from the dumped stock images)
 
@@ -67,13 +71,28 @@ Suggested order on hardware:
 2. flash the TWRP image, confirm **normal Android still boots**;
 3. `adb reboot recovery`.
 
+## Decryption notes
+
+- Runtime fstab is vendor `fstab.emmc` (`ro.boot.fstab_suffix=emmc`):
+  `fileencryption=aes-256-xts:aes-256-cts:v2` (policy flags 0x2). The
+  first-stage `fstab.mt6835` says `+inlinecrypt_optimized`; using that makes
+  `EnsurePolicy` fail on `/data/system_de/0`.
+- `TW_SKIP_ADDITIONAL_FSTAB` is required: TWRP passes the additional fstab
+  path to vold as the *zoned device*, moving the metadata key lookup to
+  `metadata_encryption/default/key`.
+- `prop.default` must report OS 15 / 2026-05-05 (stamp-recovery-props.sh).
+- TEE: `/dev/mobicore*` ownership is set in init (no vendor ueventd in
+  recovery); mcDriverDaemon uses a tmpfs copy of `persist/mcRegistry`
+  (persist is mounted read-only).
+- Base `vendor/etc/vintf/manifest.xml` and `system/etc/vintf/manifest.xml`
+  must exist or the manifest fragments are ignored.
+- TWRP's vold writes "upgraded" key blobs only to `/tmp`; on-disk blobs are
+  never rewritten.
+- Rebooting with SELinux enforcing hangs (misc write denied); the image is
+  permissive so this no longer happens.
+
 ## Next steps / known gaps
 
-- Confirm `lcd-backlight` `max_brightness` and pixel format (BGRA_8888 is a guess from another MTK DRM port).
-- Decryption: `/data` is FBE v2 + metadata encryption on a **Trustonic** TEE
-  (`ro.hardware.kmsetkey/gatekeeper=trustonic`). Needs `mcDriverDaemon`,
-  the Trustonic keymaster/keymint + gatekeeper HALs and TAs from the vendor
-  partition in `super`, then `TW_INCLUDE_CRYPTO := true`.
-- SELinux: recovery domain is permissive via `sepolicy/recovery.te`.
-  `repack-stock-vendor-boot.sh --permissive` also adds
-  `androidboot.selinux=permissive` as vendor bootconfig.
+- Re-enable MTP (ffs.mtp + ffs.adb bind dropped USB).
+- PIN/pattern decryption (gatekeeper path) untested.
+- Write real sepolicy and drop the permissive cmdline.

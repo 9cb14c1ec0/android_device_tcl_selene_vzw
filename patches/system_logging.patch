@@ -1,0 +1,26 @@
+diff --git a/logd/main.cpp b/logd/main.cpp
+index 635a7a8..58a225e 100644
+--- a/logd/main.cpp
++++ b/logd/main.cpp
+@@ -75,7 +75,7 @@ using android::base::SetProperty;
+ // handle the user, groups, capabilities, files, etc setup.
+ static void DropPrivs(bool klogd, bool auditd) {
+     if (set_sched_policy(0, SP_BACKGROUND) < 0) {
+-        PLOG(FATAL) << "failed to set background scheduling policy";
++        PLOG(ERROR) << "failed to set background scheduling policy";
+     }
+ 
+     if (!GetBoolProperty("ro.debuggable", false)) {
+@@ -215,7 +215,11 @@ int main(int argc, char* argv[]) {
+             GetBoolProperty("ro.debuggable", false) && !GetBoolProperty("ro.config.low_ram", false);
+     bool klogd = GetBoolProperty("ro.logd.kernel", klogd_default);
+     if (klogd) {
+-        SetProperty("ro.logd.kernel", "true");
++        // ro.* cannot be set twice. A previous crash after setting this
++        // made every logd restart abort.
++        if (!GetBoolProperty("ro.logd.kernel", false)) {
++            SetProperty("ro.logd.kernel", "true");
++        }
+         static const char proc_kmsg[] = "/proc/kmsg";
+         fdPmesg = android_get_control_file(proc_kmsg);
+         if (fdPmesg < 0) {
