@@ -332,7 +332,7 @@ on post-fs-data
 # -----------------------
 # Add by MTK
     # Mount mdota
-    mount ext4 /dev/block/by-name/mcf_ota${ro.boot.slot_suffix} /mnt/vendor/mdota ro wait noatime
+    mount ext4 /dev/block/by-name/mcf_ota${ro.boot.slot_suffix} /mnt/vendor/mdota ro wait noatime context=u:object_r:mcf_ota_file:s0
 
     # SCP log
     chmod 0660 /sys/class/misc/scp/scp_mobile_log

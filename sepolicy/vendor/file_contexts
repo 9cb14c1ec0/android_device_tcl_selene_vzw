@@ -130,15 +130,14 @@
 
 # Stock labels not provided by sepolicy_vndr
 /(vendor|system/vendor)/bin/frs32                                                  u:object_r:thermal_core_exec:s0
-/(vendor|system)/lib(64)?/libui\.so                                u:object_r:same_process_hal_file:s0
-/(vendor|system)/lib(64)?/libhardware\.so                                u:object_r:same_process_hal_file:s0
+/(vendor|system/vendor)/lib(64)?/libui\.so                                u:object_r:same_process_hal_file:s0
 /(vendor|system/vendor)/bin/volte_rcs_ua64                                        u:object_r:volte_rcs_ua_exec:s0
 /(vendor|system/vendor)/bin/rcs_volte_stack64                                     u:object_r:rcs_volte_stack_exec:s0
-/(vendor|system)/lib(64)?/libsensorndkbridge\.so                         u:object_r:same_process_hal_file:s0
-/(vendor|system)/lib(64)?/android\.hardware\.sensors@1\.0\.so            u:object_r:same_process_hal_file:s0
+/(vendor|system/vendor)/lib(64)?/libsensorndkbridge\.so                         u:object_r:same_process_hal_file:s0
+/(vendor|system/vendor)/lib(64)?/android\.hardware\.sensors@1\.0\.so            u:object_r:same_process_hal_file:s0
 /(vendor|system/vendor)/bin/hw/android\.hardware\.nfc-service-st           u:object_r:hal_nfc_default_exec:s0
 /(vendor|system/vendor)/bin/hw/android\.hardware\.nfc-service\.sec         u:object_r:hal_nfc_default_exec:s0
-/(vendor|system)/lib(64)?/android\.frameworks\.sensorservice@1\.0\.so    u:object_r:same_process_hal_file:s0
+/(vendor|system/vendor)/lib(64)?/android\.frameworks\.sensorservice@1\.0\.so    u:object_r:same_process_hal_file:s0
 /(vendor|system/vendor)/bin/hw/vendor\.mediatek\.hardware\.pq_aidl-service u:object_r:mtk_hal_pq_exec:s0
 /(vendor|system/vendor)/bin/hw/vendor\.mediatek\.hardware\.mms@1\.7-service u:object_r:mtk_hal_mms_exec:s0
 /(vendor|system/vendor)/bin/hw/android\.hardware\.tv\.tuner-service\.example  u:object_r:hal_tv_tuner_default_exec:s0

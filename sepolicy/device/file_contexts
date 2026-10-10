@@ -1,0 +1,3 @@
+# TCL "oembin" partition (stock: oembin_block_device, a TCL system-side type)
+/dev/block/platform/soc/11230000\.mmc/by-name/oembin    u:object_r:oembin_block_device:s0
+/dev/block/by-name/oembin                               u:object_r:oembin_block_device:s0

@@ -1,0 +1,34 @@
+# Hand-written selene_vzw policy (generated stock port: ../vendor/).
+
+# TCL oembin partition; the health HAL reads/writes it (as on stock).
+type oembin_block_device, dev_type;
+allow hal_health_default oembin_block_device:blk_file rw_file_perms;
+
+# MediaTek MCF OTA partition (/mnt/vendor/mdota, ext4 without labels; init
+# mounts it with context=). The type comes from the stock port.
+allow { mtk_hal_camera appdomain } mcf_ota_file:filesystem getattr;
+
+# Vibrator via the leds class
+allow hal_vibrator_default sysfs_vibrator:dir r_dir_perms;
+allow hal_vibrator_default sysfs_vibrator:file rw_file_perms;
+
+# TCL NxtVision display HAL talks to vendor services over vndbinder
+vndbinder_use(hal_nxtvisionext_default)
+
+# MTK camera HAL queries the SurfaceFlinger configstore
+hal_client_domain(mtk_hal_camera, hal_configstore)
+get_prop(mtk_hal_camera, graphics_config_writable_prop)
+
+# cameraserver allocates from the MTK secure (SVP) dma-buf heap
+allow cameraserver dmabuf_system_secure_heap_device:chr_file r_file_perms;
+
+# init mounts /mnt/vendor/mdota with context=mcf_ota_file
+allow init mcf_ota_file:filesystem { mount relabelfrom relabelto };
+dontaudit installd mcf_ota_file:filesystem quotaget;
+
+# Stock vendor init restorecons the oembin/proinfo by-name symlinks
+allow vendor_init block_device:lnk_file relabelfrom;
+allow vendor_init { oembin_block_device nvram_device }:lnk_file relabelto;
+
+# fstat() on dma-buf fds stats the kernel's unlabeled "dmabuf" pseudo-fs.
+dontaudit { mtk_hal_camera appdomain } unlabeled:filesystem getattr;

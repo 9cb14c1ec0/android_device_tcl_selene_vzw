@@ -132,7 +132,9 @@ TARGET_RECOVERY_FSTAB := $(DEVICE_PATH)/rootdir/etc/fstab.emmc
 # vendor property names, hence the legacy mode.
 BOARD_MTK_SEPOLICY_IS_LEGACY := true
 include device/mediatek/sepolicy_vndr/SEPolicy.mk
-BOARD_VENDOR_SEPOLICY_DIRS += $(DEVICE_PATH)/sepolicy/vendor
+BOARD_VENDOR_SEPOLICY_DIRS += \
+    $(DEVICE_PATH)/sepolicy/vendor \
+    $(DEVICE_PATH)/sepolicy/device
 
 # VINTF (stock manifest + the stock per-HAL fragments, merged; stock matrix)
 DEVICE_MANIFEST_FILE := \

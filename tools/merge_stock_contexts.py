@@ -74,6 +74,10 @@ for name, (stock_name, ours) in pairs.items():
         l = l.strip()
         if not l or l.startswith('#'):
             continue
+        if name == 'file_contexts':
+            # Vendor policy must not label system files; stock regexes like
+            # /(vendor|system)/lib(64)?/libhardware\.so would.
+            l = l.replace('/(vendor|system)/', '/(vendor|system/vendor)/', 1)
         m = re.search(r'u:object_r:([^:]+):s0', l)
         if not m or m.group(1) not in known or l.split()[0] in have:
             continue
