@@ -9,13 +9,13 @@ NxtPaper 5G, model `8189S`, codename `Selene_VZW`, MediaTek MT6835.
 | --- | --- |
 | Boot, FBE + metadata encryption, Trustonic KeyMint/keystore2 | works |
 | Display, touch, lights | works |
-| Wi-Fi (scan 2.4/5 GHz) | works; connection not yet tested |
+| Wi-Fi (2.4/5 GHz, WPA3-SAE) | works |
 | Camera: rear 8 MP / front 5 MP photo, video recording | works (Aperture) |
 | Hardware video encoder (MTK Codec2) | works |
 | Bluetooth (enable) | works; pairing/audio not tested |
 | Sensors (6), audio HAL, GNSS HAL, MTK RIL + modem | up; no SIM tested |
 | Face unlock (TCL vendor APEX) | disabled (needs VNDK libbase) |
-| SELinux | permissive (TWRP vendor_boot cmdline); enforcing not done |
+| SELinux | enforcing (needs a `vendor_boot` without `androidboot.selinux=permissive`) |
 
 ## What is built
 
