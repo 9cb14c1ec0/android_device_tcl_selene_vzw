@@ -1,0 +1,24 @@
+vendor.mediatek.hardware.engineermode.IEmds/default   u:object_r:mtk_hal_em_service:s0
+vendor.mediatek.hardware.mmlpq.IMmlpq/default u:object_r:mtk_hal_mmlpq_service:s0
+vendor.mediatek.hardware.pq_aidl.IPictureQuality_AIDL/default u:object_r:mtk_hal_pq_service:s0
+vendor.mediatek.hardware.mtkpower_applist.IMtkpower_applist/default u:object_r:mtk_hal_applist_service:s0
+vendor.mediatek.hardware.camera.aovservice.IAovService/default u:object_r:mtk_hal_aov_service:s0
+vendor.mediatek.hardware.gnss.batching.IMtkGnssBatching/default u:object_r:mtk_hal_batching_service:s0
+vendor.mediatek.hardware.bluetooth.audio.IBluetoothAudioProviderFactory/default u:object_r:mtk_hal_audio_service:s0
+arm.mali.platform.ICompression/default u:object_r:mtk_hal_mali_platform_default_service:s0
+vendor.mediatek.hardware.mbrain.IMBrain/default               u:object_r:mtk_hal_mbrain_service:s0
+vendor.mediatek.hardware.mbrainj.IMBrainJava/default          u:object_r:mtk_mbrainj_service:s0
+ipel               u:object_r:ipel_service:s0
+vendor.tcl.ipel.IIpelEngine/default               u:object_r:ipel_engine_service:s0
+vendor.tct.hardware.sysinfo.ISysInfo/default u:object_r:sysinfo_hal_hwservice:s0
+vendor.tcl.display.nxtvision.INxtvisionEx/default u:object_r:vendor_tct_display_nxtvision_service:s0
+vendor.tcl.camera.algoservice.ITctCameraAlgoService/default    u:object_r:vendor_tct_camera_algo_service:s0
+vendor.tcl.hardware.radio.tclrilhook.ITclRilHook/slot0  u:object_r:tctrilhook_service:s0
+vendor.tcl.hardware.radio.tclrilhook.ITclRilHook/slot1  u:object_r:tctrilhook_service:s0
+vendor.tct.hardware.node.INode/default    u:object_r:vendor_tct_node_service:s0
+vendor.tct.hardware.radio.simlock.ITctSimlockHal/default     u:object_r:tct_hal_simlock_service:s0
+vendor.tcl.netdclient.INetdClient/default u:object_r:netdclient_hal_hwservice:s0
+
+# Stock labels not provided by sepolicy_vndr
+android.hardware.drm.IDrmFactory/widevine    u:object_r:hal_drm_service:s0
+vendor.mediatek.hardware.apuware.apusys.INeuronApusys/default u:object_r:hal_neuralnetworks_service:s0

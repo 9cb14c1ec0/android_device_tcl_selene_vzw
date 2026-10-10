@@ -1,0 +1,10 @@
+<!-- Copyright (c) 2022 tcl.
+  jimeng.zhang, 2022-05-26
+-->
+<manifest version="1.0" type="device">
+    <hal format="aidl">
+        <name>vendor.tcl.ipel</name>
+        <version>4</version>
+        <fqname>IIpelEngine/default</fqname>
+    </hal>
+</manifest>

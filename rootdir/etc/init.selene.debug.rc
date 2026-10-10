@@ -1,0 +1,25 @@
+# Bring-up debugging (userdebug only). Remove once the device boots.
+
+on early-init
+    # Do not rate-limit /dev/kmsg writers (init, ueventd, ...) so the whole
+    # boot ends up in pstore console-ramoops after a crash/reboot.
+    write /proc/sys/kernel/printk_devkmsg on
+
+# Full logcat to /metadata (unencrypted, mounted in first stage), readable
+# from TWRP after a bootloop.
+service selene_bootlog /system/bin/logcat -b all -v uptime -f /metadata/selene-boot.log -r 8192 -n 2
+    class core
+    user root
+    group root log
+    seclabel u:r:su:s0
+    disabled
+
+on post-fs
+    rm /metadata/selene-boot.log.2
+    start selene_bootlog
+
+# Pre-enable LineageOS "Rooted debugging" so `adb root` works during bring-up
+# (adb_root reads /data/adbroot/enabled at start, before class main).
+on post-fs-data
+    mkdir /data/adbroot 0700 root root
+    write /data/adbroot/enabled 1

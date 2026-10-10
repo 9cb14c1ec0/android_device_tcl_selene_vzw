@@ -1,0 +1,16 @@
+manifest.xml + manifest/*.xml: stock /vendor/etc/vintf manifest and HAL
+fragments, merged into /vendor/etc/vintf/manifest.xml by the build.
+
+Changes from stock (merging into one file turns cross-file overlaps into
+conflicts, which makes servicemanager reject the whole device manifest):
+  - boot @1.0 entry removed (the @1.2 fragment covers it)
+  - duplicate MediaTek bluetooth.audio (AIDL) and engineermode entries removed
+  - stock lazy CAS service dropped; AOSP's android.hardware.cas@1.2-service
+    (base_vendor.mk) installs its own fragment
+Validate with tools/check-vintf.sh after `m installclean` (stale fragments in
+out/ hide missing entries).
+
+Face unlock (TCL vendor APEX com.tcl.hardware.faceunlock) is disabled: its
+service needs libbase.so, which a vendor APEX cannot reach without VNDK.
+The declaration (tct-face.xml) is parked in configs/disabled/ so the framework
+does not poll for the HAL every second.

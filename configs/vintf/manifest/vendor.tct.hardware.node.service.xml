@@ -1,0 +1,9 @@
+<!-- Copyright (c) 2022 tcl.
+  songsong.chen, 2022-04-18
+-->
+<manifest version="1.0" type="device">
+    <hal format="aidl">
+        <name>vendor.tct.hardware.node</name>
+        <fqname>INode/default</fqname>
+    </hal>
+</manifest>

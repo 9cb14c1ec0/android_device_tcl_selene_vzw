@@ -1,0 +1,14 @@
+# product.prop for selene_vzw
+# Product props load after vendor and override it.
+
+# Dalvik heap (stock values, 4 GB tablet)
+dalvik.vm.heapstartsize=8m
+dalvik.vm.heapgrowthlimit=384m
+dalvik.vm.heapsize=512m
+dalvik.vm.heaptargetutilization=0.75
+dalvik.vm.heapminfree=4m
+dalvik.vm.heapmaxfree=8m
+
+# Telephony (stock values)
+ro.telephony.default_network=32,32
+ro.telephony.iwlan_operation_mode=AP-assisted

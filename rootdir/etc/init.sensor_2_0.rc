@@ -1,0 +1,11 @@
+# MTK platform .rc configure
+on post-fs-data
+    # calibration
+    mkdir /data/vendor/sensor 0774 system system
+    # Sensor
+    # Begin modified by jianchuan.hu for barometer calibration.
+    mkdir /mnt/vendor/persist/sensor 0777 system system
+    # chmod 0660 /dev/hf_manager
+    chmod 0666 /dev/hf_manager
+    # End modified by jianchuan.hu for barometer calibration.
+    chown system system /dev/hf_manager

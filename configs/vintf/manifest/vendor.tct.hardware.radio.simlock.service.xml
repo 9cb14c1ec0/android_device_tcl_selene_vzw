@@ -1,0 +1,9 @@
+<!-- Copyright (c) 2022 tcl.
+  wangyongzhen, 2022-04-18
+-->
+<manifest version="1.0" type="device">
+    <hal format="aidl">
+        <name>vendor.tct.hardware.radio.simlock</name>
+        <fqname>ITctSimlockHal/default</fqname>
+    </hal>
+</manifest>

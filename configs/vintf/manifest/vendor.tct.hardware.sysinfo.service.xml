@@ -1,0 +1,9 @@
+<!-- Copyright (c) 2022 tcl.
+-->
+<manifest version="1.0" type="device">
+    <hal format="aidl">
+        <name>vendor.tct.hardware.sysinfo</name>
+        <version>4</version>
+        <fqname>ISysInfo/default</fqname>
+    </hal>
+</manifest>

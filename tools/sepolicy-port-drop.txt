@@ -1,0 +1,7 @@
+# Exact stock_port.te lines that violate Android 15 neverallows (see sepolicy/vendor/stock_port_fixups.te)
+allow aee_aedv binderfs_logs:dir { ioctl read getattr lock open watch watch_reads search };
+allow aee_aedv binderfs_logs:file { ioctl read getattr lock map open watch watch_reads };
+allow crash_dump binderfs_logs:dir { ioctl read getattr lock open watch watch_reads search };
+allow crash_dump binderfs_logs:file { ioctl read getattr lock map open watch watch_reads };
+allow crash_dump binderfs_logs_proc:file { ioctl read getattr lock map open watch watch_reads };
+allow { domain -app_zygote -hal_configstore_server -init -isolated_app_all -vendor_init -webview_zygote } mtk_hal_mali_platform_default_service:service_manager { find };

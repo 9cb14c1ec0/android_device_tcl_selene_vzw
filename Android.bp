@@ -1,0 +1,21 @@
+//
+// SPDX-FileCopyrightText: The LineageOS Project
+// SPDX-License-Identifier: Apache-2.0
+//
+
+soong_namespace {
+}
+
+install_symlink {
+    name: "vendor_etc_mdota_symlink",
+    vendor: true,
+    installed_location: "etc/mdota",
+    symlink_target: "/mnt/vendor/mdota",
+}
+
+cc_library_shared {
+    name: "libcrypto_shim_selene",
+    srcs: ["shims/libcrypto/crypto_shim.c"],
+    shared_libs: ["libcrypto"],
+    vendor: true,
+}

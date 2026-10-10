@@ -1,0 +1,11 @@
+# selene_vzw device init additions.
+
+# AOSP's generic rild (telephony_vendor.mk) must not run next to MediaTek's
+# mtkfusionrild (vendor.ril-daemon-mtk); stock never shipped it.
+service vendor.ril-daemon /vendor/bin/hw/rild
+    override
+    class main
+    user radio
+    group radio cache inet misc audio log readproc wakelock
+    capabilities BLOCK_SUSPEND NET_ADMIN NET_RAW
+    disabled

@@ -1,0 +1,7 @@
+# Hand-written additions on top of the ported stock policy (stock_port.te).
+
+# Stock allows every domain to find the Mali platform service (it is used
+# in-process by the gralloc mapper). Android 15 forbids vendor apps from
+# finding non-app_api services, so mark it as such instead.
+typeattribute mtk_hal_mali_platform_default_service app_api_service;
+allow { domain -app_zygote -hal_configstore_server -init -isolated_app_all -vendor_init -webview_zygote } mtk_hal_mali_platform_default_service:service_manager find;
