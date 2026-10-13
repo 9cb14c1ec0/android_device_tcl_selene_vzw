@@ -17,9 +17,3 @@ service selene_bootlog /system/bin/logcat -b all -v uptime -f /metadata/selene-b
 on post-fs
     rm /metadata/selene-boot.log.2
     start selene_bootlog
-
-# Pre-enable LineageOS "Rooted debugging" so `adb root` works during bring-up
-# (adb_root reads /data/adbroot/enabled at start, before class main).
-on post-fs-data
-    mkdir /data/adbroot 0700 root root
-    write /data/adbroot/enabled 1

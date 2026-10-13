@@ -1,0 +1,14 @@
+# Properties that stock TCL/MediaTek system images label for the A13 vendor
+# blobs. LineageOS does not define them, so they would fall back to
+# system_prop/default_prop, which vendor domains may not read. They are never
+# set on LineageOS; the blobs only read them and use their defaults.
+vendor_internal_prop(vendor_tcl_framework_prop)
+
+# ro.tct.trace.* (BSN, PCBA/BT/Wi-Fi trace info): set by gettraceability
+vendor_internal_prop(vendor_tcl_trace_prop)
+
+# Read by LineageOS frameworks/av (cameraserver, camera apps); never set here
+vendor_public_prop(vendor_camera_framework_prop)
+
+# Mali DDK driver tunables, read by every GL client
+vendor_public_prop(vendor_mali_ddk_prop)

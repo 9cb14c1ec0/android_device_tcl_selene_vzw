@@ -37,3 +37,6 @@ genfscon sysfs /devices/platform/soc/11c10000.efuse/mtk-devinfo0/nvmem          
 genfscon sysfs /devices/platform/soc/1c804000.spmi/spmi-0/0-04/mt6377-rtc/rtc/rtc0/alarmtimer.0.auto/wakeup u:object_r:sysfs_wakeup:s0
 genfscon sysfs /devices/platform/soc/1c804000.spmi/spmi-0/0-04/mt6377-gauge/power_supply/battery/wakeup u:object_r:sysfs_wakeup:s0
 genfscon sysfs /devices/platform/soc/1c804000.spmi/spmi-0/0-04/mt6377-gauge/power_supply/mtk-gauge/wakeup u:object_r:sysfs_wakeup:s0
+
+# Blue LED (AOSP init.rc chowns /sys/class/leds/blue/brightness)
+genfscon sysfs /devices/platform/soc/11ed3000.i2c/i2c-9/9-0045/leds/blue u:object_r:sysfs_leds_selene:s0

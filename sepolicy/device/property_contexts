@@ -1,0 +1,27 @@
+# Verizon retail demo mode (health HAL limits charging)
+sys.vzw.demo.mode.enabled                u:object_r:vendor_tcl_framework_prop:s0 exact bool
+# TCL power-save mode (mtkpower)
+persist.sys.perf.powersave.              u:object_r:vendor_tcl_framework_prop:s0
+# TCL IPEL display engine (composer, vendor.tcl.ipel)
+persist.sys.tct.ipel.                    u:object_r:vendor_tcl_framework_prop:s0
+persist.sys.ipel.                        u:object_r:vendor_tcl_framework_prop:s0
+# MediaTek/TCL release info (camera HAL, mtkfusionrild, aee)
+ro.mediatek.version.release              u:object_r:vendor_tcl_framework_prop:s0 exact string
+ro.tct.config_hotfix                     u:object_r:vendor_tcl_framework_prop:s0 exact string
+# MediaTek camera EXIF writer (libmtkcam_exif); unlabeled on stock too
+jpeg.exif.icc.profile                    u:object_r:vendor_tcl_framework_prop:s0 exact string
+# TCL hera boot-hang log triggers (bootperf.rc; notstart_hera is not on LineageOS)
+persist.log.hera_                        u:object_r:vendor_tcl_framework_prop:s0
+
+ro.tct.trace.                            u:object_r:vendor_tcl_trace_prop:s0
+
+# Set by vendor build.prop, read by libpowerhalwrap
+persist.system.powerhal.applist_enable   u:object_r:vendor_power_prop:s0 exact bool
+
+# LineageOS camera framework knobs (CameraDeviceClient)
+persist.vendor.camera.privapp.list       u:object_r:vendor_camera_framework_prop:s0 exact string
+ro.vendor.camera.res.fmq.size            u:object_r:vendor_camera_framework_prop:s0 exact int
+
+# Mali DDK
+persist.glt.                             u:object_r:vendor_mali_ddk_prop:s0
+persist.meow.                            u:object_r:vendor_mali_ddk_prop:s0

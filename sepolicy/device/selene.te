@@ -36,3 +36,61 @@ allow vendor_init { oembin_block_device nvram_device }:lnk_file relabelto;
 
 # fstat() on dma-buf fds stats the kernel's unlabeled "dmabuf" pseudo-fs.
 dontaudit { mtk_hal_camera appdomain } unlabeled:filesystem getattr;
+
+# TCL framework props read by vendor blobs (property.te)
+get_prop({
+    hal_graphics_composer_default
+    hal_health_default
+    ipel_engine_service_default
+    mtk_hal_camera
+    mtk_hal_power
+    rild
+    vendor_init
+}, vendor_tcl_framework_prop)
+
+# gettraceability publishes ro.tct.trace.* from the boot config
+set_prop(gettraceability, vendor_tcl_trace_prop)
+allow gettraceability proc_bootconfig:file r_file_perms;
+get_prop(hal_sensors_default, vendor_tcl_trace_prop)
+
+# Bluetooth HAL rc triggers on vts.native_server.on
+get_prop(vendor_init, vts_status_prop)
+
+# com.tcl.hardware.faceunlock.rc manages /data/tct_face_data, outside
+# /data/vendor; Android 15 neverallows that for vendor_init (face unlock is
+# parked anyway).
+dontaudit vendor_init tctface_data_file:dir { search getattr };
+
+# init.cccimdinit.rc restorecons /oem/svn.bin (read-only oem partition; the
+# modem symlink to it is created regardless)
+dontaudit vendor_init oemfs:dir search;
+
+# AOSP storaged.rc/dumpstate.rc open and chown the eMMC ext_csd debugfs node;
+# enforce_debugfs_restriction forbids init from touching debugfs.
+dontaudit init debugfs_mmc:file { open read setattr };
+
+# Battery gauge NVRAM helper reads /proc/device-tree/firmware/android
+r_dir_file(fuelgauged_nvram, sysfs_dt_firmware_android)
+
+# Probes for debug dumps in /data/local/tmp
+dontaudit hal_algoservice_default { system_data_file shell_data_file }:dir search;
+
+# AOSP libaudiopolicycomponents checks the Qualcomm-only
+# ro.vendor.qti.va_aosp.support; cameraserver and ccci_rpcd look up unset
+# props through AOSP libraries. All are unset here.
+dontaudit { audioserver cameraserver } vendor_default_prop:file read;
+dontaudit ccci_rpcd default_prop:file read;
+
+# vold fstrims every mounted ext4 (IdleMaint); the FITRIM ioctl itself is
+# allowed for all file types by AOSP
+allow vold oem_persist_file:dir r_dir_perms;
+# /mnt/vendor/persist is vendor data, which coredomain may not read (neverallow)
+dontaudit vold persist_data_file:dir read;
+
+get_prop({ appdomain cameraserver }, vendor_camera_framework_prop)
+get_prop(domain, vendor_mali_ddk_prop)
+
+# GPU warp pipeline in the camera HAL: EGL blob cache config, and its
+# shader-cache lookup under /data (no cache dir for a HAL)
+get_prop(mtk_hal_camera, graphics_config_prop)
+dontaudit mtk_hal_camera system_data_file:dir search;
