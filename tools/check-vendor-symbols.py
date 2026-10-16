@@ -113,10 +113,18 @@ def closure(path, lib):
 def bionic_syms(lib):
     """Exported symbols of the runtime APEX bionic (libc/libm/libdl)."""
     syms = set()
+    # Android 16 no longer fills symbols/; use the Soong runtime APEX variant.
+    arch = {'lib64': 'arm64_armv8-2a-dotprod_cortex-a55', 'lib': 'arm_armv8-2a_cortex-a55'}[lib]
     for mod in ('libc', 'libm', 'libdl'):
-        p = os.path.join(os.environ.get('BIONIC_DIR', os.path.join(OUT, 'symbols/apex/com.android.runtime/{lib}/bionic')).format(lib=lib), mod + '.so')
-        if not os.path.exists(p):
-            sys.exit(f'{p} missing; build the system image first')
+        candidates = [
+            os.path.join(OUT, f'symbols/apex/com.android.runtime/{lib}/bionic/{mod}.so'),
+            f'out/soong/.intermediates/bionic/{mod}/{mod}/android_{arch}_shared_apex10000/{mod}.so',
+        ]
+        if 'BIONIC_DIR' in os.environ:
+            candidates = [os.path.join(os.environ['BIONIC_DIR'].format(lib=lib), mod + '.so')]
+        p = next((c for c in candidates if os.path.exists(c)), None)
+        if p is None:
+            sys.exit(f'{candidates[0]} missing; build the system image first')
         syms |= defined(p)
     return frozenset(syms)
 

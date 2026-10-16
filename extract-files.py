@@ -48,6 +48,29 @@ lib_fixups: lib_fixups_user_type = {
     copy_only_libs: lib_fixup_vendor_suffix,
 }
 
+CODEC2_V33 = (
+    'libcodec2',
+    'libstagefright_foundation',
+    'libstagefright_bufferqueue_helper',
+    'libui',
+    'libcodec2_vndk',
+    'libcodec2_soft_common',
+    'libsfplugin_ccodec_utils',
+    'libcodec2_hidl@1.0',
+    'libcodec2_hidl@1.1',
+    'libcodec2_hidl@1.2',
+    'libcodec2_hidl_plugin',
+    'libstagefright_bufferpool@2.0.1',
+)
+
+
+def codec2_v33() -> blob_fixup:
+    fixup = blob_fixup()
+    for lib in CODEC2_V33:
+        fixup = fixup.replace_needed(f'{lib}.so', f'{lib}-v33.so')
+    return fixup
+
+
 blob_fixups: blob_fixups_user_type = {
     # libui (Android 16) uses android.hardware.graphics.common-V7; a process
     # may only link one version of an AIDL interface. V7 is a superset of V3.
@@ -59,10 +82,36 @@ blob_fixups: blob_fixups_user_type = {
     (
         'vendor/lib64/libcodec2_vpp_AIMEMC_plugin.so',
         'vendor/lib64/libcodec2_vpp_AISR_plugin.so',
-    ): blob_fixup()
+    ): codec2_v33()
         .replace_needed('android.hardware.graphics.common-V3-ndk.so', 'android.hardware.graphics.common-V7-ndk.so')
-        .replace_needed('android.hardware.graphics.allocator-V1-ndk.so', 'android.hardware.graphics.allocator-V2-ndk.so')
-        .replace_needed('libstagefright_foundation.so', 'libstagefright_foundation-v33.so'),
+        .replace_needed('android.hardware.graphics.allocator-V1-ndk.so', 'android.hardware.graphics.allocator-V2-ndk.so'),
+    # The 64-bit Codec2 service and its components use the Android 13 Codec2
+    # framework, shipped renamed by compat/codec2-v33 (see generate.py there).
+    (
+        'vendor/bin/hw/android.hardware.media.c2@1.2-mediatek-64b',
+        'vendor/lib64/libcodec2_mtk_c2store.so',
+        'vendor/lib64/libcodec2_mtk_vdec.so',
+        'vendor/lib64/libcodec2_mtk_venc.so',
+        'vendor/lib64/libcodec2_soft_mtk_alacdec.so',
+        'vendor/lib64/libcodec2_soft_mtk_imaadpcmdec.so',
+        'vendor/lib64/libcodec2_soft_mtk_mp3dec.so',
+        'vendor/lib64/libcodec2_soft_mtk_msadpcmdec.so',
+        'vendor/lib64/libcodec2_vpp_mi_plugin.so',
+        'vendor/lib64/libcodec2_vpp_qt_plugin.so',
+        'vendor/lib64/libcodec2_vpp_rs_plugin.so',
+    ): codec2_v33(),
+    # The MediaTek Codec2 service calls uname()/sysinfo() on Android 16;
+    # without them the seccomp filter kills it with SIGSYS.
+    'vendor/etc/seccomp_policy/android.hardware.media.c2@1.2-mediatek-seccomp-policy': blob_fixup()
+        .add_line_if_missing('uname: 1')
+        .add_line_if_missing('sysinfo: 1'),
+    # libmtkutils re-exports an old libutils (SharedBuffer, VectorImpl); load
+    # the real libutils first so current libbinder binds to it.
+    (
+        'vendor/bin/atcid',
+        'vendor/bin/hw/mtkfusionrild',
+    ): blob_fixup()
+        .add_needed('libutils.so'),
     # host_init_verifier rejects `interface` lines for MediaTek HIDL
     # interfaces that are not defined in this source tree; they only matter
     # for lazy (on-demand) starts, and these services start by class.
@@ -85,6 +134,18 @@ blob_fixups: blob_fixups_user_type = {
         'vendor/lib64/hw/android.hardware.boot@1.0-impl-1.2-mtkimpl.so',
         'vendor/lib/libnvram.so',
         'vendor/lib64/libnvram.so',
+        # Android 16 also dropped WriteStringToFd/Basename(const std::string&).
+        'vendor/bin/hw/android.hardware.sensors-service.multihal',
+        'vendor/bin/tdefrag_engine',
+        'vendor/lib64/android.hardware.power-service-mediatek.so',
+        'vendor/lib/libavservices_minijail.so',
+        'vendor/lib64/libavservices_minijail.so',
+        'vendor/lib/libcodec2_hidl@1.0.so',
+        'vendor/lib/libcodec2_hidl@1.1.so',
+        'vendor/lib/libcodec2_hidl@1.2.so',
+        'vendor/lib64/libcodec2_hidl@1.0.so',
+        'vendor/lib64/libcodec2_hidl@1.1.so',
+        'vendor/lib64/libcodec2_hidl@1.2.so',
     ): blob_fixup()
         .add_needed('libbase_shim.so'),
     # Android 15 libprocessgroup changed the SetTaskProfiles signature.
@@ -118,17 +179,7 @@ blob_fixups: blob_fixups_user_type = {
         'vendor/lib64/hw/sensors.mediatek.V2.0.so',
         'vendor/lib64/libaudioclient_aidl_conversion.so',
         'vendor/lib64/libcamera2ndk_vendor.so',
-        'vendor/lib64/libcodec2_mtk_c2store.so',
-        'vendor/lib64/libcodec2_mtk_vdec.so',
-        'vendor/lib64/libcodec2_mtk_venc.so',
         'vendor/lib64/libcodec2_soft_common.so',
-        'vendor/lib64/libcodec2_soft_mtk_alacdec.so',
-        'vendor/lib64/libcodec2_soft_mtk_imaadpcmdec.so',
-        'vendor/lib64/libcodec2_soft_mtk_mp3dec.so',
-        'vendor/lib64/libcodec2_soft_mtk_msadpcmdec.so',
-        'vendor/lib64/libcodec2_vpp_mi_plugin.so',
-        'vendor/lib64/libcodec2_vpp_qt_plugin.so',
-        'vendor/lib64/libcodec2_vpp_rs_plugin.so',
         'vendor/lib64/libsfplugin_ccodec_utils.so',
         'vendor/lib/libaudioclient_aidl_conversion.so',
         'vendor/lib/libcodec2_mtk_c2store.so',
