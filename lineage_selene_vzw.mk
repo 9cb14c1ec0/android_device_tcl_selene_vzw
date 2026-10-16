@@ -3,6 +3,12 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 
+# The stock (A13) OMX service and its libavservices_minijail are kept as
+# vendor prebuilts. Android 16's generated vendor image does not honor their
+# OVERRIDES, so keep base_vendor.mk from installing the AOSP builds as well.
+# Must be set before base_vendor.mk is inherited.
+TARGET_SUPPORTS_OMX_SERVICE := false
+
 # 64-bit kernel/userspace with 32-bit app support (stock ro.zygote=zygote64_32).
 $(call inherit-product, $(SRC_TARGET_DIR)/product/core_64_bit.mk)
 $(call inherit-product, $(SRC_TARGET_DIR)/product/aosp_base_telephony.mk)

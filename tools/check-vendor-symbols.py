@@ -16,8 +16,8 @@ import sys
 from functools import lru_cache
 
 OUT = sys.argv[1] if len(sys.argv) > 1 else 'out/target/product/selene_vzw'
-NM = os.environ.get('LLVM_NM', 'prebuilts/clang/host/linux-x86/clang-r536225/bin/llvm-nm')
-READELF = os.environ.get('LLVM_READELF', 'prebuilts/clang/host/linux-x86/clang-r536225/bin/llvm-readelf')
+NM = os.environ.get('LLVM_NM', 'prebuilts/clang/host/linux-x86/clang-r563880c/bin/llvm-nm')
+READELF = os.environ.get('LLVM_READELF', 'prebuilts/clang/host/linux-x86/clang-r563880c/bin/llvm-readelf')
 
 # Libraries vendor code may load from the system side (LLNDK + bionic).
 LLNDK_DIRS = ['system/{lib}', 'system/{lib}/bootstrap']

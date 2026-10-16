@@ -97,6 +97,10 @@ for l in open(te):
     for st, ot in aliases.items():
         if re.search(r'\b' + re.escape(st) + r'\b', l):
             mirrored.append(re.sub(r'\b' + re.escape(st) + r'\b', ot, l.rstrip()))
+drop_file = os.environ.get('PORT_DROP')
+if drop_file and os.path.exists(drop_file):
+    drop = {l.strip() for l in open(drop_file) if l.strip() and not l.startswith('#')}
+    mirrored = [l for l in mirrored if l.strip() not in drop]
 if mirrored:
     with open(te, 'a') as f:
         f.write('\n# Stock rules mirrored onto labels sepolicy_vndr already defines\n')

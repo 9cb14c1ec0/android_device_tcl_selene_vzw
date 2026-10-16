@@ -49,18 +49,18 @@ lib_fixups: lib_fixups_user_type = {
 }
 
 blob_fixups: blob_fixups_user_type = {
-    # libui (Android 15) uses android.hardware.graphics.common-V6; a process
-    # may only link one version of an AIDL interface. V6 is a superset of V3.
+    # libui (Android 16) uses android.hardware.graphics.common-V7; a process
+    # may only link one version of an AIDL interface. V7 is a superset of V3.
     (
         'vendor/lib/vendor.mediatek.hardware.pq_aidl-V1-ndk.so',
         'vendor/lib64/vendor.mediatek.hardware.pq_aidl-V1-ndk.so',
     ): blob_fixup()
-        .replace_needed('android.hardware.graphics.common-V3-ndk.so', 'android.hardware.graphics.common-V6-ndk.so'),
+        .replace_needed('android.hardware.graphics.common-V3-ndk.so', 'android.hardware.graphics.common-V7-ndk.so'),
     (
         'vendor/lib64/libcodec2_vpp_AIMEMC_plugin.so',
         'vendor/lib64/libcodec2_vpp_AISR_plugin.so',
     ): blob_fixup()
-        .replace_needed('android.hardware.graphics.common-V3-ndk.so', 'android.hardware.graphics.common-V6-ndk.so')
+        .replace_needed('android.hardware.graphics.common-V3-ndk.so', 'android.hardware.graphics.common-V7-ndk.so')
         .replace_needed('android.hardware.graphics.allocator-V1-ndk.so', 'android.hardware.graphics.allocator-V2-ndk.so')
         .replace_needed('libstagefright_foundation.so', 'libstagefright_foundation-v33.so'),
     # host_init_verifier rejects `interface` lines for MediaTek HIDL

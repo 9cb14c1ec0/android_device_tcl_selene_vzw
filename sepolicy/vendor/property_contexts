@@ -1,4 +1,3 @@
-vendor.service.wifi_nvram u:object_r:vendor_mtk_service_wifi_nvram_prop:s0
 vendor.debug.sf.dynamic_duration. u:object_r:vendor_mtk_debug_sf_duration_prop:s0
 vendor.debug.sf.kickidle. u:object_r:vendor_mtk_debug_sf_kickidle_prop:s0
 ro.vendor.mtk_hwc_dsi_switch u:object_r:vendor_mtk_hwc_dsi_switch_prop:s0
@@ -11,11 +10,9 @@ vendor.boostfwk.scroll.duration.v      u:object_r:vendor_mtk_boostfwk_scroll_dur
 vendor.boostfwk.sbb.touch.duration     u:object_r:vendor_mtk_boostfwk_sbb_touch_duration_prop:s0
 vendor.boostfwk.scroll.floor           u:object_r:vendor_mtk_boostfwk_scroll_floor_prop:s0
 vendor.boostfwk.frame.decision         u:object_r:vendor_mtk_boostfwk_frame_decision_prop:s0
-ro.vendor.mtk_backlight_hwc_support u:object_r:vendor_mtk_backlight_ro_prop:s0
 ro.vendor.mtk_aov_app_support       u:object_r:vendor_mtk_aov_app_support_prop:s0
 ro.vendor.mtk_flp_support u:object_r:vendor_mtk_flp_prop:s0
 ro.vendor.mtk_geofence_support u:object_r:vendor_mtk_geofence_prop:s0
-ro.vendor.magt.mtk_magt_support u:object_r:vendor_mtk_magt_support_prop:s0
 persist.vendor.sss.     u:object_r:vendor_mtk_smartpower_prop:s0
 persist.vendor.acf.mode u:object_r:vendor_mtk_smartpower_acf_prop:s0
 ro.vendor.mtk.c2.gpu.fmt.support.level u:object_r:vendor_mtk_c2_gpu_fmt_prop:s0
@@ -68,22 +65,14 @@ persist.vendor.face.strength                u:object_r:vendor_tct_face_prop:s0
 # Stock labels not provided by sepolicy_vndr
 ro.vendor.usb.      u:object_r:vendor_mtk_usb_prop:s0
 persist.vendor.radio.nitz_oper_key            u:object_r:vendor_mtk_telephony_sensitive_prop:s0
-vendor.debug.sf.fbthint u:object_r:vendor_mtk_debug_sf_cpupolicy_prop:s0
-persist.vendor.mtk_sim_switch_policy   u:object_r:vendor_mtk_default_prop:s0
-ro.vendor.arm.              u:object_r:vendor_mtk_gpu_prop:s0
-persist.vendor.debug.gpud.  u:object_r:vendor_mtk_gpu_prop:s0
-vendor.mali.                u:object_r:vendor_mtk_gpu_prop:s0
 vendor.bluetooth.lhdc_codec.supported u:object_r:vendor_mtk_default_prop:s0
 vendor.mtk.c2.scenario. u:object_r:vendor_mtk_video_prop:s0
 persist.vendor.bluetooth.bms_qr                    u:object_r:vendor_mtk_default_prop:s0
 persist.vendor.bluetooth.broadcaster.tx_pwr        u:object_r:vendor_mtk_default_prop:s0
 persist.vendor.bluetooth.supportopphdt             u:object_r:vendor_mtk_default_prop:s0
 persist.vendor.bluetooth.connection_improve        u:object_r:vendor_mtk_default_prop:s0
-persist.vendor.mtk.vodata.enable u:object_r:vendor_mtk_wfc_prop:s0
 persist.vendor.mtk.5gvowifi.force.enable u:object_r:vendor_mtk_vonr_force_prop:s0
-ro.vendor.vt_hevc_support u:object_r:vendor_mtk_default_prop:s0
 ro.vendor.videoainr.enable            u:object_r:vendor_mtk_camera_prop:s0
-ro.vendor.afbc.enable                 u:object_r:vendor_mtk_camera_prop:s0
 persist.vendor.service.rcs.slot2      u:object_r:vendor_mtk_service_rcs_prop:s0
 persist.vendor.service.tag.rcs.slot2  u:object_r:vendor_mtk_service_rcs_prop:s0
 ro.vendor.mtk_mdmi_support u:object_r:vendor_mtk_dmc_prop:s0

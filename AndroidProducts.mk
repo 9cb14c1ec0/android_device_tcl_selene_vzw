@@ -7,6 +7,6 @@ PRODUCT_MAKEFILES := \
     $(LOCAL_DIR)/lineage_selene_vzw.mk
 
 COMMON_LUNCH_CHOICES := \
-    lineage_selene_vzw-bp1a-user \
-    lineage_selene_vzw-bp1a-userdebug \
-    lineage_selene_vzw-bp1a-eng
+    lineage_selene_vzw-bp4a-user \
+    lineage_selene_vzw-bp4a-userdebug \
+    lineage_selene_vzw-bp4a-eng

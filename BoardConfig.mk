@@ -129,8 +129,9 @@ TARGET_RECOVERY_FSTAB := $(DEVICE_PATH)/rootdir/etc/fstab.emmc
 
 # SELinux: LineageOS MediaTek vendor policy + the rest of the stock policy
 # ported in sepolicy/vendor (stock_port.te). The A13 blobs use pre-namespace
-# vendor property names, hence the legacy mode.
-BOARD_MTK_SEPOLICY_IS_LEGACY := true
+# vendor property names (sys.*, persist.sys.*, ro.tct.*, ...). sepolicy_vndr
+# dropped its legacy mode on 23.2, so allow them here.
+BUILD_BROKEN_VENDOR_PROPERTY_NAMESPACE := true
 include device/mediatek/sepolicy_vndr/SEPolicy.mk
 BOARD_VENDOR_SEPOLICY_DIRS += \
     $(DEVICE_PATH)/sepolicy/vendor \

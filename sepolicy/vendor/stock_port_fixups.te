@@ -5,3 +5,8 @@
 # finding non-app_api services, so mark it as such instead.
 typeattribute mtk_hal_mali_platform_default_service app_api_service;
 allow { domain -app_zygote -hal_configstore_server -init -isolated_app_all -vendor_init -webview_zygote } mtk_hal_mali_platform_default_service:service_manager find;
+
+# Stock lets every gralloc client use the allocator's tmpfs buffers. Android 16
+# adds isolated_compute_app as an allocator client, and isolated types may not
+# get more than isolated_app, so leave them out.
+allow { hal_graphics_allocator_client -isolated_app_all } hal_graphics_allocator_default_tmpfs:file { ioctl read write getattr lock append map open watch watch_reads };
