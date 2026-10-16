@@ -100,6 +100,22 @@ blob_fixups: blob_fixups_user_type = {
         'vendor/lib64/libcodec2_vpp_qt_plugin.so',
         'vendor/lib64/libcodec2_vpp_rs_plugin.so',
     ): codec2_v33(),
+    # Android 16 libtinyxml2 changed the XMLDocument layout; the stock XML
+    # parsers crash (power HALs, audio HAL). Use the Android 14 build.
+    (
+        'vendor/bin/dconfig',
+        'vendor/lib/hw/audio.primary.mediatek.so',
+        'vendor/lib/lib_power_applist.so',
+        'vendor/lib/libpowerhal.so',
+        'vendor/lib/libpqxmlparser.so',
+        'vendor/lib/librt_extamp_intf.so',
+        'vendor/lib64/hw/audio.primary.mediatek.so',
+        'vendor/lib64/lib_power_applist.so',
+        'vendor/lib64/libpowerhal.so',
+        'vendor/lib64/libpqxmlparser.so',
+        'vendor/lib64/librt_extamp_intf.so',
+    ): blob_fixup()
+        .replace_needed('libtinyxml2.so', 'libtinyxml2-v34.so'),
     # The MediaTek Codec2 service calls uname()/sysinfo() on Android 16;
     # without them the seccomp filter kills it with SIGSYS.
     'vendor/etc/seccomp_policy/android.hardware.media.c2@1.2-mediatek-seccomp-policy': blob_fixup()
