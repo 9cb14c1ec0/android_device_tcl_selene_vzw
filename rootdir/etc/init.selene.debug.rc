@@ -7,7 +7,7 @@ on early-init
 
 # Full logcat to /metadata (unencrypted, mounted in first stage), readable
 # from TWRP after a bootloop.
-service selene_bootlog /system/bin/logcat -b all -v uptime -f /metadata/selene-boot.log -r 8192 -n 2
+service selene_bootlog /system/bin/logcat -b all -v monotonic -f /metadata/selene-boot.log -r 8192 -n 2
     class core
     user root
     group root log
