@@ -84,6 +84,16 @@ PRODUCT_COPY_FILES += \
 PRODUCT_PACKAGES += \
     OpenEUICC
 
+# Voice calls over VoLTE: MediaTek ImsService adapted to AOSP telephony
+# (vendor/mediatek/ims, see .repo/local_manifests/selene_vzw.xml); the vendor
+# IMS radio slots, mtkradioex and vtservice come from the stock blobs. The
+# tablet telephony config has no dialer, and the stock RRO turns voice off
+# (rro_overlays/FrameworksResOverlaySelene turns it back on).
+$(call inherit-product, vendor/mediatek/ims/ims.mk)
+PRODUCT_PACKAGES += \
+    Dialer \
+    FrameworksResOverlaySelene
+
 # Stock /oem files (bind-mounted on /oem by init.selene.rc)
 PRODUCT_COPY_FILES += \
     $(foreach f,oem.prop skus.xml svn.bin svn.xml,\

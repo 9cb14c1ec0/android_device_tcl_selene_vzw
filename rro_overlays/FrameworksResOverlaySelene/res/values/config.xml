@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     SPDX-FileCopyrightText: The LineageOS Project
+     SPDX-License-Identifier: Apache-2.0
+-->
+<resources>
+    <!-- The stock Verizon RRO (FrameworkRes_rro_product) marks the tablet as
+         not voice capable; LineageOS supports VoLTE calls (MediaTek IMS). -->
+    <bool name="config_voice_capable">true</bool>
+</resources>
