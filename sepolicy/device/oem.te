@@ -1,0 +1,2 @@
+# /oem is bind-mounted from /vendor/etc/oem (init.selene.rc).
+allow init oemfs:dir mounton;

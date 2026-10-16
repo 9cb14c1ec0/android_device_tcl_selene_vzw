@@ -116,6 +116,23 @@ blob_fixups: blob_fixups_user_type = {
         'vendor/lib64/librt_extamp_intf.so',
     ): blob_fixup()
         .replace_needed('libtinyxml2.so', 'libtinyxml2-v34.so'),
+    # Stock (Android 13) Bluetooth audio AIDL impl, installed as -v33: AOSP's
+    # android.hardware.bluetooth.audio-impl would install to the same path,
+    # along with its (V5) VINTF fragment.
+    'vendor/lib64/android.hardware.bluetooth.audio-impl-v33.so': blob_fixup()
+        .fix_soname(),
+    'vendor/bin/hw/android.hardware.audio.service.mediatek': blob_fixup()
+        .replace_needed('android.hardware.bluetooth.audio-impl.so', 'android.hardware.bluetooth.audio-impl-v33.so'),
+    # Stock HAL services installed as -v33 (gen-proprietary-files.py RENAME):
+    # their AOSP namesakes would install to the same path, and Android 16
+    # then also installs the AOSP modules' VINTF fragments and libraries.
+    (
+        'vendor/etc/init/android.hardware.drm-service.clearkey.rc',
+        'vendor/etc/init/android.hardware.health-service.example.rc',
+        'vendor/etc/init/android.hardware.sensors-service-multihal.rc',
+        'vendor/etc/init/android.hardware.wifi.supplicant-service.rc',
+    ): blob_fixup()
+        .regex_replace(r'(/vendor/bin/hw/(android\.hardware\.(drm-service\.clearkey|health-service\.example|sensors-service\.multihal)|wpa_supplicant))(?=\s)', r'\1-v33'),
     # The MediaTek Codec2 service calls uname()/sysinfo() on Android 16;
     # without them the seccomp filter kills it with SIGSYS.
     'vendor/etc/seccomp_policy/android.hardware.media.c2@1.2-mediatek-seccomp-policy': blob_fixup()
@@ -144,14 +161,14 @@ blob_fixups: blob_fixups_user_type = {
     # Android 15 libbase dropped Trim(const std::string&) (now string_view).
     (
         'vendor/bin/dmabuf_dump',
-        'vendor/bin/hw/android.hardware.health-service.example',
+        'vendor/bin/hw/android.hardware.health-service.example-v33',
         'vendor/bin/hw/android.hardware.usb-aidl-service.mediatekv1.0',
         'vendor/lib/hw/android.hardware.boot@1.0-impl-1.2-mtkimpl.so',
         'vendor/lib64/hw/android.hardware.boot@1.0-impl-1.2-mtkimpl.so',
         'vendor/lib/libnvram.so',
         'vendor/lib64/libnvram.so',
         # Android 16 also dropped WriteStringToFd/Basename(const std::string&).
-        'vendor/bin/hw/android.hardware.sensors-service.multihal',
+        'vendor/bin/hw/android.hardware.sensors-service.multihal-v33',
         'vendor/bin/tdefrag_engine',
         'vendor/lib64/android.hardware.power-service-mediatek.so',
         'vendor/lib/libavservices_minijail.so',
@@ -173,7 +190,7 @@ blob_fixups: blob_fixups_user_type = {
         .add_needed('android.hardware.security.rkp-V2-ndk.so'),
     # Android 15 BoringSSL: sk_dup -> OPENSSL_sk_dup, CBS_init inline.
     (
-        'vendor/bin/hw/wpa_supplicant',
+        'vendor/bin/hw/wpa_supplicant-v33',
         'vendor/bin/hw/hostapd',
         'vendor/bin/hs20-osu-client',
     ): blob_fixup()

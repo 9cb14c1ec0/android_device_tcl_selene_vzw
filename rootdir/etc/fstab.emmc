@@ -39,7 +39,7 @@ system_dlkm /system_dlkm ext4 ro wait,slotselect,avb,logical,first_stage_mount
 preload /preload erofs ro wait,logical,first_stage_mount,nofail,slotselect
 
 
-oem /oem ext4 ro wait,avb,logical,first_stage_mount,slotselect
+# oem: not shipped; its files are bind-mounted from /vendor/etc/oem (init.selene.rc)
 
 
 

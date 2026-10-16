@@ -1,0 +1,13 @@
+# LineageOS recovery (vendor_boot). Based on the stock init.recovery.mt6835.rc.
+
+on init
+    setprop sys.usb.configfs 1
+    setprop sys.usb.controller "11201000.usb0"
+    setprop vendor.usb.controller "11201000.usb0"
+
+on post-fs
+    # A/B eMMC boot regions (preloader), as stock
+    symlink /dev/block/mmcblk0boot0 /dev/block/by-name/preloader_a
+    symlink /dev/block/mmcblk0boot1 /dev/block/by-name/preloader_b
+    symlink /dev/block/by-name/preloader_a /dev/block/by-name/preloader_emmc_a
+    symlink /dev/block/by-name/preloader_b /dev/block/by-name/preloader_emmc_b

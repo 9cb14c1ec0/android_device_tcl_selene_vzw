@@ -139,7 +139,6 @@ apexd.config.loop_wait.attempts=100
 apexd.config.dm_create.timeout=5000
 ro.vendor.tct.target.op=VZW
 ro.vendor.mgvi_name=mgvi_64_armv82
-ro.minui.pixel_format=BGRA_8888
 ro.hwui.use_vulkan=
 external_storage.projid.enabled=1
 external_storage.casefold.enabled=1

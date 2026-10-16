@@ -9,3 +9,9 @@ service vendor.ril-daemon /vendor/bin/hw/rild
     group radio cache inet misc audio log readproc wakelock
     capabilities BLOCK_SUSPEND NET_ADMIN NET_RAW
     disabled
+
+# The stock oem logical partition is not shipped (OTAs drop it from the slot
+# they write). Its files live in /vendor/etc/oem; the modem reads /oem/svn.bin
+# through the nvdata symlink made by init.cccimdinit.rc.
+on early-fs
+    mount none /vendor/etc/oem /oem bind

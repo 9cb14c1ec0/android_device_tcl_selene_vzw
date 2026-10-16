@@ -1,0 +1,16 @@
+ro.oem.tag=VZW
+ro.vendor.tct.oem.ver=C4PEPRN0DY00
+####################################
+# from generate-common-build-props
+# These properties identify this partition image.
+####################################
+ro.product.oem.manufacturer=TCL
+ro.oem.build.date=Sat May 23 00:48:21 CST 2026
+ro.oem.build.date.utc=1779468501
+ro.oem.build.id=TP1A.220624.014
+ro.oem.build.tags=test-keys
+ro.oem.build.type=user
+ro.oem.build.version.incremental=4PEN
+ro.oem.build.version.release=13
+ro.oem.build.version.release_or_codename=13
+ro.oem.build.version.sdk=33

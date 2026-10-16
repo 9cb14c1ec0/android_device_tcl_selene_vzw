@@ -1,3 +1,9 @@
 # TCL "oembin" partition (stock: oembin_block_device, a TCL system-side type)
 /dev/block/platform/soc/11230000\.mmc/by-name/oembin    u:object_r:oembin_block_device:s0
 /dev/block/by-name/oembin                               u:object_r:oembin_block_device:s0
+
+# Stock HAL services installed under -v33 names (see extract-files.py)
+/vendor/bin/hw/android\.hardware\.drm-service\.clearkey-v33       u:object_r:hal_drm_clearkey_aidl_exec:s0
+/vendor/bin/hw/android\.hardware\.health-service\.example-v33     u:object_r:hal_health_default_exec:s0
+/vendor/bin/hw/android\.hardware\.sensors-service\.multihal-v33   u:object_r:hal_sensors_default_exec:s0
+/vendor/bin/hw/wpa_supplicant-v33                                 u:object_r:hal_wifi_supplicant_default_exec:s0

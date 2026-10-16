@@ -1,0 +1,28 @@
+/*
+ * Copyright (C) 2022 The LineageOS Project
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+// Recovery health HAL, from hardware/mediatek (aidl/health, 68f9be7). Copied
+// here because importing the hardware/mediatek namespace clashes with stock
+// blobs of the same names (chipinfo, libaedv, ...).
+
+cc_binary {
+    name: "android.hardware.health-service.mediatek-recovery",
+    defaults: [
+        "libhealth_aidl_impl_user",
+        "libhealth_aidl_charger_defaults",
+    ],
+    relative_install_path: "hw",
+    vintf_fragments: ["android.hardware.health-service.mediatek.xml"],
+    srcs: [
+        "Health.cpp",
+    ],
+    static_libs: [
+        "libhealth_aidl_impl",
+    ],
+    recovery: true,
+    init_rc: ["android.hardware.health-service.mediatek-recovery.rc"],
+    overrides: ["charger.recovery"],
+}

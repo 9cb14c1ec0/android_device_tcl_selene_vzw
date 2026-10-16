@@ -61,6 +61,35 @@ PRODUCT_VENDOR_LINKER_CONFIG_FRAGMENTS += $(LOCAL_PATH)/configs/vendor-linker.co
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/rootdir/etc/init.selene.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/init.selene.rc
 
+# First-stage ramdisk (vendor_boot): fstabs and the stock first-stage kernel
+# modules with their stock load lists (modules.load.recovery adds the panel and
+# touch drivers for recovery).
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/rootdir/etc/fstab.mt6835:$(TARGET_COPY_OUT_VENDOR_RAMDISK)/first_stage_ramdisk/fstab.mt6835 \
+    $(LOCAL_PATH)/rootdir/etc/fstab.emmc:$(TARGET_COPY_OUT_VENDOR_RAMDISK)/first_stage_ramdisk/fstab.emmc \
+    $(foreach f,$(notdir $(wildcard $(LOCAL_PATH)-kernel/vendor_ramdisk/lib/modules/*)),\
+        $(LOCAL_PATH)-kernel/vendor_ramdisk/lib/modules/$(f):$(TARGET_COPY_OUT_VENDOR_RAMDISK)/lib/modules/$(f))
+
+# Stock /oem files (bind-mounted on /oem by init.selene.rc)
+PRODUCT_COPY_FILES += \
+    $(foreach f,oem.prop skus.xml svn.bin svn.xml,\
+        $(LOCAL_PATH)/configs/oem/$(f):$(TARGET_COPY_OUT_VENDOR)/etc/oem/$(f))
+
+# Recovery
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/rootdir/etc/init.recovery.mt6835.rc:$(TARGET_COPY_OUT_RECOVERY)/root/init.recovery.mt6835.rc
+
+# Boot control: MediaTek's HAL (hal/boot), also in recovery (LineageOS
+# recovery has none, and update_engine_sideload needs one). Switching slots
+# also switches the eMMC boot area (preloader_a/b).
+PRODUCT_PACKAGES += \
+    android.hardware.boot-service.mediatek \
+    android.hardware.boot-service.mediatek_recovery
+
+# Health HAL for recovery (hal/health; battery level check before installs)
+PRODUCT_PACKAGES += \
+    android.hardware.health-service.mediatek-recovery
+
 # Bring-up debugging: unthrottled kmsg + logcat to /metadata (userdebug)
 ifneq ($(TARGET_BUILD_VARIANT),user)
 PRODUCT_COPY_FILES += \

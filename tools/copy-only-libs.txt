@@ -12,7 +12,6 @@ android.hardware.audio.effect@7.0-impl
 android.hardware.audio.effect@7.0-util
 android.hardware.bluetooth.audio@2.0-impl
 android.hardware.bluetooth.audio@2.1-impl
-android.hardware.bluetooth.audio-impl
 android.hardware.boot@1.2-service
 android.hardware.cas@1.2-service-lazy
 android.hardware.drm-service.clearkey

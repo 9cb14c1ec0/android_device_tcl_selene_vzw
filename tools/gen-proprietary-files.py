@@ -25,6 +25,10 @@ EXCLUDE = [
     r'bin/hw/android\.hardware\.cas@1\.2-service-lazy$',
     r'etc/init/android\.hardware\.cas@1\.2-service-lazy\.rc$',
     r'overlay/.*\.apk$',  # RROs: prebuilt/overlay (prebuilt_overlay modules)
+    # Boot control: hardware/mediatek's AIDL HAL (also needed in recovery)
+    r'bin/hw/android\.hardware\.boot@1\.2-service$',
+    r'etc/init/android\.hardware\.boot@1\.2-service\.rc$',
+    r'lib(64)?/hw/android\.hardware\.boot@1\.0-impl-1\.2-mtkimpl\.so$',
 ]
 # AOSP interface libraries (HIDL/AIDL, stable ABI) and generic AOSP vendor
 # modules that base_vendor.mk/handheld_vendor.mk install anyway: the build
@@ -35,10 +39,26 @@ EXCLUDE = [re.compile(r'^vendor/' + e) for e in EXCLUDE]
 APK = re.compile(r'\.apk$')
 # Stock blobs whose names clash with AOSP source modules: keep the stock
 # binary as a prebuilt module renamed with a _vendor suffix (installed under
-# the original file name).
+# the original file name). No OVERRIDES: on Android 16 an override pulls the
+# AOSP module's install deps (VINTF fragments, AIDL libs) into the staging
+# directory, and with it into the target files and OTA.
 COPY_ONLY_LIBS = open(os.path.join(os.path.dirname(__file__), 'copy-only-libs.txt')).read().split()
 _names = '|'.join(map(re.escape, COPY_ONLY_LIBS))
 COPY_ONLY = re.compile(r'^vendor/(lib(64)?/(.+/)?(' + _names + r')\.so|bin/(.+/)?(' + _names + r'))$')
+
+# Stock libraries installed under a -v33 name instead: their AOSP namesakes
+# would install to the same path (and, for HAL impls, their VINTF fragments).
+# extract-files.py points the users at the new name.
+RENAME = {
+    'vendor/lib64/android.hardware.bluetooth.audio-impl.so':
+        'vendor/lib64/android.hardware.bluetooth.audio-impl-v33.so',
+}
+RENAME.update({f'vendor/bin/hw/{b}': f'vendor/bin/hw/{b}-v33' for b in (
+    'android.hardware.drm-service.clearkey',
+    'android.hardware.health-service.example',
+    'android.hardware.sensors-service.multihal',
+    'wpa_supplicant',
+)})
 
 files, links = [], {}
 for dp, dns, fns in os.walk(V):
@@ -62,10 +82,10 @@ fileset = set(files)
 for f in sorted(files):
     line = f
     m = COPY_ONLY.search(f)
-    if m:
-        name = os.path.basename(f)
-        name = name[:-3] if name.endswith('.so') else name
-        line += ';MODULE_SUFFIX=_vendor;OVERRIDES=' + name
+    if f in RENAME:
+        line += ':' + RENAME[f]
+    elif m:
+        line += ';MODULE_SUFFIX=_vendor'
     elif APK.search(f):
         line += ';PRESIGNED'
     if f in links:
