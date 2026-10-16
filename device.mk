@@ -37,6 +37,12 @@ PRODUCT_PACKAGES += \
     update_engine_sideload \
     update_verifier
 
+# Command-line A/B updates (adb shell update_engine_client) on test builds
+ifneq ($(TARGET_BUILD_VARIANT),user)
+PRODUCT_PACKAGES += \
+    update_engine_client
+endif
+
 PRODUCT_PACKAGES += \
     lpdump \
     snapshotctl
