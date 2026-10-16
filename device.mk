@@ -76,6 +76,14 @@ PRODUCT_COPY_FILES += \
     $(foreach f,$(notdir $(wildcard $(LOCAL_PATH)-kernel/vendor_ramdisk/lib/modules/*)),\
         $(LOCAL_PATH)-kernel/vendor_ramdisk/lib/modules/$(f):$(TARGET_COPY_OUT_VENDOR_RAMDISK)/lib/modules/$(f))
 
+# eSIM: the second SIM slot is an eUICC. Stock declares the feature on the
+# system side (not shipped here). OpenEUICC (packages/apps/OpenEUICC, see
+# .repo/local_manifests/selene_vzw.xml) is the privileged LPA.
+PRODUCT_COPY_FILES += \
+    frameworks/native/data/etc/android.hardware.telephony.euicc.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.telephony.euicc.xml
+PRODUCT_PACKAGES += \
+    OpenEUICC
+
 # Stock /oem files (bind-mounted on /oem by init.selene.rc)
 PRODUCT_COPY_FILES += \
     $(foreach f,oem.prop skus.xml svn.bin svn.xml,\
