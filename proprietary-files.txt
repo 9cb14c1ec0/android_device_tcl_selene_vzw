@@ -2556,7 +2556,7 @@ vendor/lib64/android.hardware.audio.effect@6.0-util.so;MODULE_SUFFIX=_vendor
 vendor/lib64/android.hardware.audio.effect@7.0-util.so;MODULE_SUFFIX=_vendor
 vendor/lib64/android.hardware.audio@7.0-util.so;MODULE_SUFFIX=_vendor
 vendor/lib64/android.hardware.audio@7.1-util.so;MODULE_SUFFIX=_vendor
-vendor/lib64/android.hardware.bluetooth.audio-impl.so:vendor/lib64/android.hardware.bluetooth.audio-impl-v33.so
+vendor/lib64/android.hardware.bluetooth.audio-impl.so:vendor/lib64/android.hardware.bluetooth.audio-v33.so
 vendor/lib64/android.hardware.graphics.composer@2.1-resources.so;MODULE_SUFFIX=_vendor
 vendor/lib64/android.hardware.graphics.composer@2.2-resources.so;MODULE_SUFFIX=_vendor
 vendor/lib64/android.hardware.power-service-mediatek.so;MODULE_SUFFIX=_vendor
