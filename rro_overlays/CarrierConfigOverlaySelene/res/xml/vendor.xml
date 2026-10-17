@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!--
+     SPDX-FileCopyrightText: The LineageOS Project
+     SPDX-License-Identifier: Apache-2.0
+-->
+<carrier_config_list>
+    <!-- Verizon requires VoLTE provisioning, and the MediaTek ImsService
+         reports it as not provisioned, so the framework never enables
+         VoLTE and calls fall back to CS, which Verizon no longer has.
+         311480 also covers Verizon MVNOs (US Mobile, Visible, ...), which
+         use the Verizon config through the MCC/MNC fallback. -->
+    <carrier_config mcc="311" mnc="480">
+        <boolean name="carrier_volte_provisioning_required_bool" value="false" />
+    </carrier_config>
+    <carrier_config cid="1839" name="verizon">
+        <boolean name="carrier_volte_provisioning_required_bool" value="false" />
+    </carrier_config>
+</carrier_config_list>

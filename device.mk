@@ -92,6 +92,7 @@ PRODUCT_PACKAGES += \
 $(call inherit-product, vendor/mediatek/ims/ims.mk)
 PRODUCT_PACKAGES += \
     Dialer \
+    CarrierConfigOverlaySelene \
     FrameworksResOverlaySelene
 
 # Stock /oem files (bind-mounted on /oem by init.selene.rc)
