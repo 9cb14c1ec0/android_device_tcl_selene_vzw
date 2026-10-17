@@ -95,6 +95,11 @@ PRODUCT_PACKAGES += \
     CarrierConfigOverlaySelene \
     FrameworksResOverlaySelene
 
+# Tells the modem that mobile data is on; without it the Verizon data policy
+# refuses the internet PDN (see datasettings/main.cpp).
+PRODUCT_PACKAGES += \
+    mtk_data_settings
+
 # Stock /oem files (bind-mounted on /oem by init.selene.rc)
 PRODUCT_COPY_FILES += \
     $(foreach f,oem.prop skus.xml svn.bin svn.xml,\

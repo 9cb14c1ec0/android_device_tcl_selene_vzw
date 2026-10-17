@@ -207,3 +207,6 @@
 /sys/class/power_supply/battery/charging_done u:object_r:sysfs_batteryinfo:s0
 /sys/class/power_supply/battery/charging_control u:object_r:sysfs_batteryinfo:s0
 /sys/devices/platform/charger/battery_charge_protect u:object_r:sysfs_batteryinfo:s0
+
+# Modem data settings sync (see mtk_data_settings.te).
+/vendor/bin/mtk_data_settings                                        u:object_r:mtk_data_settings_exec:s0
