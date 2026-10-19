@@ -95,6 +95,14 @@ PRODUCT_PACKAGES += \
     CarrierConfigOverlaySelene \
     FrameworksResOverlaySelene
 
+# Bluetooth audio: the AOSP stack starts its sessions in AOSP's
+# libbluetooth_audio_session_aidl, while the stock A2DP HAL waits on MediaTek's
+# copy. Use the AOSP provider (loaded by the stock audio service, with its own
+# VINTF fragment) and A2DP HAL, which share that library.
+PRODUCT_PACKAGES += \
+    android.hardware.bluetooth.audio-impl \
+    audio.bluetooth.default
+
 # Tells the modem that mobile data is on; without it the Verizon data policy
 # refuses the internet PDN (see datasettings/main.cpp).
 PRODUCT_PACKAGES += \

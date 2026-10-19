@@ -10,8 +10,6 @@ android.hardware.audio.effect@6.0-impl
 android.hardware.audio.effect@6.0-util
 android.hardware.audio.effect@7.0-impl
 android.hardware.audio.effect@7.0-util
-android.hardware.bluetooth.audio@2.0-impl
-android.hardware.bluetooth.audio@2.1-impl
 android.hardware.boot@1.2-service
 android.hardware.cas@1.2-service-lazy
 android.hardware.drm-service.clearkey
@@ -32,7 +30,6 @@ android.hardware.soundtrigger@2.3-impl
 android.hardware.thermal@1.0-impl
 android.hardware.vibrator-service.mediatek
 android.media.audio.common.types-V1-cpp
-audio.bluetooth.default
 audioclient-types-aidl-cpp
 audio_policy.stub
 audio.r_submix.default
@@ -47,8 +44,6 @@ libarmnn
 libaudioclient_aidl_conversion
 libaudiofoundation
 libavservices_minijail
-libbluetooth_audio_session
-libbluetooth_audio_session_aidl
 libbt-vendor
 libcamera2ndk_vendor
 libchrome
@@ -59,7 +54,6 @@ libcodec2_hidl_plugin
 libcodec2_soft_common
 libcodec2_vndk
 libdrm
-libflatbuffers-cpp
 libhidltransport
 libhidparser
 libhwbinder

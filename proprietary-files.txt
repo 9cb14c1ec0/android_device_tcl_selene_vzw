@@ -1667,15 +1667,12 @@ vendor/lib/hw/android.hardware.audio.effect@7.0-impl.so;MODULE_SUFFIX=_vendor
 vendor/lib/hw/android.hardware.audio@6.0-impl-mediatek.so
 vendor/lib/hw/android.hardware.audio@7.0-impl-mediatek.so
 vendor/lib/hw/android.hardware.audio@7.1-impl-mediatek.so
-vendor/lib/hw/android.hardware.bluetooth.audio@2.0-impl.so;MODULE_SUFFIX=_vendor
-vendor/lib/hw/android.hardware.bluetooth.audio@2.1-impl.so;MODULE_SUFFIX=_vendor
 vendor/lib/hw/android.hardware.bluetooth@1.1-impl-mediatek.so
 vendor/lib/hw/android.hardware.gatekeeper@1.0-impl.so;MODULE_SUFFIX=_vendor
 vendor/lib/hw/android.hardware.renderscript@1.0-impl.so;MODULE_SUFFIX=_vendor
 vendor/lib/hw/android.hardware.soundtrigger@2.3-impl.so;MODULE_SUFFIX=_vendor
 vendor/lib/hw/android.hardware.thermal@1.0-impl.so;MODULE_SUFFIX=_vendor
 vendor/lib/hw/android.hardware.thermal@2.0-impl.so
-vendor/lib/hw/audio.bluetooth.default.so;MODULE_SUFFIX=_vendor
 vendor/lib/hw/audio.primary.mediatek.so;SYMLINK=vendor/lib/hw/audio.primary.mt6835.so
 vendor/lib/hw/audio.r_submix.default.so;MODULE_SUFFIX=_vendor
 vendor/lib/hw/audio.r_submix.mediatek.so;SYMLINK=vendor/lib/hw/audio.r_submix.mt6835.so
@@ -2035,8 +2032,6 @@ vendor/lib/libavservices_minijail.so;MODULE_SUFFIX=_vendor
 vendor/lib/libawinic_mtk_aurisys.so
 vendor/lib/libbessound_hd_mtk_vendor.so
 vendor/lib/libblisrc32_vendor.so
-vendor/lib/libbluetooth_audio_session.so;MODULE_SUFFIX=_vendor
-vendor/lib/libbluetooth_audio_session_aidl.so;MODULE_SUFFIX=_vendor
 vendor/lib/libbluetooth_audio_session_aidl_mediatek.so
 vendor/lib/libbluetooth_audio_session_mediatek.so
 vendor/lib/libbluetooth_hw_test.so
@@ -2077,7 +2072,6 @@ vendor/lib/libdrm.so;MODULE_SUFFIX=_vendor
 vendor/lib/libdynamiclog.so
 vendor/lib/libfgauge_gm30.so
 vendor/lib/libfile_op.so
-vendor/lib/libflatbuffers-cpp.so;MODULE_SUFFIX=_vendor
 vendor/lib/libformatter.so
 vendor/lib/libged.so
 vendor/lib/libgpu_aux.so
@@ -2556,7 +2550,6 @@ vendor/lib64/android.hardware.audio.effect@6.0-util.so;MODULE_SUFFIX=_vendor
 vendor/lib64/android.hardware.audio.effect@7.0-util.so;MODULE_SUFFIX=_vendor
 vendor/lib64/android.hardware.audio@7.0-util.so;MODULE_SUFFIX=_vendor
 vendor/lib64/android.hardware.audio@7.1-util.so;MODULE_SUFFIX=_vendor
-vendor/lib64/android.hardware.bluetooth.audio-impl.so:vendor/lib64/android.hardware.bluetooth.audio-v33.so
 vendor/lib64/android.hardware.graphics.composer@2.1-resources.so;MODULE_SUFFIX=_vendor
 vendor/lib64/android.hardware.graphics.composer@2.2-resources.so;MODULE_SUFFIX=_vendor
 vendor/lib64/android.hardware.power-service-mediatek.so;MODULE_SUFFIX=_vendor
@@ -2580,8 +2573,6 @@ vendor/lib64/hw/android.hardware.audio.effect@7.0-impl.so;MODULE_SUFFIX=_vendor
 vendor/lib64/hw/android.hardware.audio@6.0-impl-mediatek.so
 vendor/lib64/hw/android.hardware.audio@7.0-impl-mediatek.so
 vendor/lib64/hw/android.hardware.audio@7.1-impl-mediatek.so
-vendor/lib64/hw/android.hardware.bluetooth.audio@2.0-impl.so;MODULE_SUFFIX=_vendor
-vendor/lib64/hw/android.hardware.bluetooth.audio@2.1-impl.so;MODULE_SUFFIX=_vendor
 vendor/lib64/hw/android.hardware.bluetooth@1.1-impl-mediatek.so
 vendor/lib64/hw/android.hardware.gatekeeper@1.0-impl.so;MODULE_SUFFIX=_vendor
 vendor/lib64/hw/android.hardware.gnss-impl-mediatek.so
@@ -2591,7 +2582,6 @@ vendor/lib64/hw/android.hardware.sensors@2.X-subhal-mediatek.so
 vendor/lib64/hw/android.hardware.soundtrigger@2.3-impl.so;MODULE_SUFFIX=_vendor
 vendor/lib64/hw/android.hardware.thermal@1.0-impl.so;MODULE_SUFFIX=_vendor
 vendor/lib64/hw/android.hardware.thermal@2.0-impl.so
-vendor/lib64/hw/audio.bluetooth.default.so;MODULE_SUFFIX=_vendor
 vendor/lib64/hw/audio.primary.mediatek.so;SYMLINK=vendor/lib64/hw/audio.primary.mt6835.so
 vendor/lib64/hw/audio.r_submix.default.so;MODULE_SUFFIX=_vendor
 vendor/lib64/hw/audio.r_submix.mediatek.so;SYMLINK=vendor/lib64/hw/audio.r_submix.mt6835.so
@@ -2982,8 +2972,6 @@ vendor/lib64/libavservices_minijail.so;MODULE_SUFFIX=_vendor
 vendor/lib64/libawinic_mtk_aurisys.so
 vendor/lib64/libbessound_hd_mtk_vendor.so
 vendor/lib64/libblisrc32_vendor.so
-vendor/lib64/libbluetooth_audio_session.so;MODULE_SUFFIX=_vendor
-vendor/lib64/libbluetooth_audio_session_aidl.so;MODULE_SUFFIX=_vendor
 vendor/lib64/libbluetooth_audio_session_aidl_mediatek.so
 vendor/lib64/libbluetooth_audio_session_mediatek.so
 vendor/lib64/libbluetooth_hw_test.so
@@ -3039,7 +3027,6 @@ vendor/lib64/libfacepose.so
 vendor/lib64/libfft_vendor.so
 vendor/lib64/libfgauge_gm30.so
 vendor/lib64/libfile_op.so
-vendor/lib64/libflatbuffers-cpp.so;MODULE_SUFFIX=_vendor
 vendor/lib64/libforkexecwrap.so
 vendor/lib64/libformatter.so
 vendor/lib64/libged.so

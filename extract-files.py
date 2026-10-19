@@ -116,17 +116,11 @@ blob_fixups: blob_fixups_user_type = {
         'vendor/lib64/librt_extamp_intf.so',
     ): blob_fixup()
         .replace_needed('libtinyxml2.so', 'libtinyxml2-v34.so'),
-    # Stock (Android 13) Bluetooth audio AIDL impl, installed as
-    # android.hardware.bluetooth.audio-v33: AOSP's
-    # android.hardware.bluetooth.audio-impl would install to the same path,
-    # along with its (V5) VINTF fragment. The audio service links it and also
-    # dlopens it by name to register IBluetoothAudioProviderFactory/default;
-    # the new name is shorter so that string can be patched in place.
-    'vendor/lib64/android.hardware.bluetooth.audio-v33.so': blob_fixup()
-        .fix_soname(),
+    # The audio service loads the Bluetooth audio provider (AOSP's
+    # android.hardware.bluetooth.audio-impl, see device.mk) with dlopen
+    # anyway; linking it would mix AIDL versions in one module.
     'vendor/bin/hw/android.hardware.audio.service.mediatek': blob_fixup()
-        .replace_needed('android.hardware.bluetooth.audio-impl.so', 'android.hardware.bluetooth.audio-v33.so')
-        .binary_regex_replace(b'android.hardware.bluetooth.audio-impl\x00', b'android.hardware.bluetooth.audio-v33\x00\x00'),
+        .remove_needed('android.hardware.bluetooth.audio-impl.so'),
     # Stock HAL services installed as -v33 (gen-proprietary-files.py RENAME):
     # their AOSP namesakes would install to the same path, and Android 16
     # then also installs the AOSP modules' VINTF fragments and libraries.

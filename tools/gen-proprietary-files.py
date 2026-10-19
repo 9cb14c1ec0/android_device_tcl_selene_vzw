@@ -48,12 +48,8 @@ COPY_ONLY = re.compile(r'^vendor/(lib(64)?/(.+/)?(' + _names + r')\.so|bin/(.+/)
 
 # Stock libraries installed under a -v33 name instead: their AOSP namesakes
 # would install to the same path (and, for HAL impls, their VINTF fragments).
-# extract-files.py points the users at the new name. The audio service also
-# dlopens the Bluetooth audio impl by name, so its new name must not be longer.
-RENAME = {
-    'vendor/lib64/android.hardware.bluetooth.audio-impl.so':
-        'vendor/lib64/android.hardware.bluetooth.audio-v33.so',
-}
+# extract-files.py points the users at the new name.
+RENAME = {}
 RENAME.update({f'vendor/bin/hw/{b}': f'vendor/bin/hw/{b}-v33' for b in (
     'android.hardware.drm-service.clearkey',
     'android.hardware.health-service.example',
