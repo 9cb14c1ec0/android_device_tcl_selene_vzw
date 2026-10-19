@@ -2,7 +2,7 @@
 # SPDX-FileCopyrightText: The LineageOS Project
 # SPDX-License-Identifier: Apache-2.0
 #
-# LineageOS 22.2 (Android 15) for the Verizon TCL Tab 8 NxtPaper 5G
+# LineageOS 23.2 (Android 16) for the Verizon TCL Tab 8 NxtPaper 5G
 # (8189S / selene_vzw), MediaTek MT6835.
 #
 # Builds the whole A/B OTA set except the firmware: boot (stock GKI kernel),
