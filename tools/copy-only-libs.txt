@@ -34,7 +34,6 @@ audioclient-types-aidl-cpp
 audio_policy.stub
 audio.r_submix.default
 audio.usb.default
-dmabuf_dump
 framework-permission-aidl-cpp
 hostapd
 hostapd_cli
@@ -53,7 +52,6 @@ libcodec2_hidl@1.2
 libcodec2_hidl_plugin
 libcodec2_soft_common
 libcodec2_vndk
-libdrm
 libhidltransport
 libhidparser
 libhwbinder
@@ -62,12 +60,10 @@ libhwc2onfbadapter
 libkeystore-engine-wifi-hidl
 libkeystore-wifi-hidl
 libmediautils_vendor
-libmemunreachable
 libmockdrmcryptoplugin
 libmtkperf_client_vendor
 libnbaio_mono
 libOpenCL
-libopus
 libpcap
 libpowerhalwrap_vendor
 libruy
@@ -103,11 +99,7 @@ libstagefright_soft_vorbisdec
 libstagefright_soft_vpxdec
 libstagefright_soft_vpxenc
 libstdc++
-libtextclassifier_hash
-libtinycompress
 libvibrator
-libvorbisidec
-libvpx
 libwifi-hal
 libwpa_client
 sensors.dynamic_sensor_hal
@@ -115,5 +107,4 @@ shared-file-region-aidl-cpp
 vendor.mediatek.hardware.mtkpower@1.0
 vendor.mediatek.hardware.mtkpower@1.1
 vendor.mediatek.hardware.mtkpower@1.2
-wpa_cli
 wpa_supplicant

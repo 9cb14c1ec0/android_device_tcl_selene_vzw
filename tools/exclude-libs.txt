@@ -115,3 +115,10 @@ libvisualizer
 local_time.default
 power.default
 vibrator.default
+libdrm
+libmemunreachable
+libopus
+libtextclassifier_hash
+libtinycompress
+libvorbisidec
+libvpx

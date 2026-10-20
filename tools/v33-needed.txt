@@ -1,0 +1,149 @@
+vendor/bin/atcid libhidltransport.so libhwbinder.so
+vendor/bin/em_hidl libhidltransport.so
+vendor/bin/factory libalsautils.so libhidltransport.so libhwbinder.so
+vendor/bin/hw/android.hardware.audio.service.mediatek libaudiofoundation.so libhidltransport.so libhwbinder.so
+vendor/bin/hw/android.hardware.bluetooth@1.1-service-mediatek libhidltransport.so
+vendor/bin/hw/android.hardware.graphics.composer@2.1-service-v33 android.hardware.graphics.composer@2.1-resources.so libhwc2on1adapter.so libhwc2onfbadapter.so
+vendor/bin/hw/android.hardware.graphics.composer@2.3-service-v33 android.hardware.graphics.composer@2.1-resources.so android.hardware.graphics.composer@2.2-resources.so libhwc2on1adapter.so libhwc2onfbadapter.so
+vendor/bin/hw/android.hardware.graphics.composer@2.4-service-v33 android.hardware.graphics.composer@2.1-resources.so android.hardware.graphics.composer@2.2-resources.so libhwc2on1adapter.so libhwc2onfbadapter.so
+vendor/bin/hw/android.hardware.graphics.composer@3.1-service android.hardware.graphics.composer@2.2-resources.so android.hardware.graphics.composer@2.1-resources.so
+vendor/bin/hw/android.hardware.media.c2@1.2-mediatek-64b libavservices_minijail.so
+vendor/bin/hw/android.hardware.media.omx@1.0-service-v33 libavservices_minijail.so
+vendor/bin/hw/android.hardware.sensors-service.multihal-v33 android.hardware.sensors@2.0-ScopedWakelock.so
+vendor/bin/hw/android.hardware.wifi@1.0-service-lazy libwifi-hal.so
+vendor/bin/hw/cameraalgoservice libcamera2ndk_vendor.so
+vendor/bin/hw/mt6835/camerahalserver libhwbinder.so libhidltransport.so
+vendor/bin/hw/tetheroffloadservice libhwbinder.so libhidltransport.so
+vendor/bin/hw/vendor.mediatek.hardware.mms@1.7-service libhidltransport.so
+vendor/bin/hw/vendor.mediatek.hardware.nvram@1.1-service libhidltransport.so
+vendor/bin/hw/vendor.tcl.display.nxtvision.service libhidltransport.so
+vendor/bin/hw/vtservice_hidl libhwbinder.so libhidltransport.so
+vendor/bin/hw/wpa_supplicant-v33 libkeystore-wifi-hidl.so libkeystore-engine-wifi-hidl.so
+vendor/bin/lbs_hidl_service libhidltransport.so
+vendor/bin/md_monitor libhidltransport.so
+vendor/bin/meta_tst libhidltransport.so
+vendor/bin/mnld libhidltransport.so libsensorndkbridge.so
+vendor/bin/tdefrag_engine libchrome.so
+vendor/bin/volte_clientapi_ua libhidltransport.so libhwbinder.so
+vendor/bin/volte_rcs_ua libhidltransport.so libhwbinder.so
+vendor/bin/volte_rcs_ua64 libhidltransport.so libhwbinder.so
+vendor/lib/android.hardware.audio.common@6.0-util-v33.so android.hardware.audio.common-util.so
+vendor/lib/android.hardware.audio.common@7.0-util-v33.so android.hardware.audio.common-util.so android.hardware.audio.common@7.0-enums.so
+vendor/lib/android.hardware.audio.common@7.1-util-v33.so android.hardware.audio.common-util.so android.hardware.audio.common@7.1-enums.so
+vendor/lib/android.hardware.audio.effect@6.0-util-v33.so android.hardware.audio.common-util.so android.hardware.audio.common@6.0-util.so
+vendor/lib/android.hardware.audio.effect@7.0-util-v33.so android.hardware.audio.common-util.so android.hardware.audio.common@7.0-util.so
+vendor/lib/android.hardware.audio@7.0-util-v33.so android.hardware.audio.common-util.so android.hardware.audio.common@7.0-enums.so android.hardware.audio.common@7.0-util.so
+vendor/lib/android.hardware.audio@7.1-util-v33.so android.hardware.audio.common-util.so android.hardware.audio.common@7.1-enums.so android.hardware.audio.common@7.1-util.so
+vendor/lib/audioclient-types-aidl-cpp-v33.so android.media.audio.common.types-V1-cpp.so framework-permission-aidl-cpp.so
+vendor/lib/com.tct.cameraalgo.scenedetect.so libsensorndkbridge.so libhidltransport.so
+vendor/lib/hw/android.hardware.audio.effect@6.0-impl.so android.hardware.audio.common-util.so android.hardware.audio.common@6.0-util.so android.hardware.audio.effect@6.0-util.so
+vendor/lib/hw/android.hardware.audio.effect@7.0-impl.so android.hardware.audio.common-util.so android.hardware.audio.common@7.0-util.so android.hardware.audio.effect@7.0-util.so
+vendor/lib/hw/android.hardware.audio@6.0-impl-mediatek.so libaudiofoundation.so libhidltransport.so android.hardware.audio.common-util.so android.hardware.audio.common@6.0-util.so
+vendor/lib/hw/android.hardware.audio@7.0-impl-mediatek.so libaudiofoundation.so libhidltransport.so android.hardware.audio@7.0-util.so android.hardware.audio.common@7.0-enums.so android.hardware.audio.common@7.0-util.so android.hardware.audio.common-util.so
+vendor/lib/hw/android.hardware.audio@7.1-impl-mediatek.so libaudiofoundation.so libhidltransport.so libmediautils_vendor.so android.hardware.audio@7.1-util.so android.hardware.audio.common@7.1-enums.so android.hardware.audio.common@7.1-util.so android.hardware.audio.common-util.so
+vendor/lib/hw/audio.primary.mediatek.so libalsautils.so android.hardware.audio.common-util.so android.hardware.audio.common@7.0-util.so android.hardware.audio.common@7.1-util.so libhidltransport.so libhwbinder.so
+vendor/lib/hw/audio.r_submix.default.so libnbaio_mono.so
+vendor/lib/hw/audio.r_submix.mediatek.so libnbaio_mono.so
+vendor/lib/hw/audio.usb.default.so libalsautils.so
+vendor/lib/hw/mt6835/vendor.mediatek.hardware.camera.atms@1.0-impl.so libhidltransport.so
+vendor/lib/hw/mt6835/vendor.mediatek.hardware.pq_aidl-impl.so libhidltransport.so libhwbinder.so
+vendor/lib/hw/sensors.dynamic_sensor_hal.so libhidparser.so android.hardware.sensors@2.0-ScopedWakelock.so
+vendor/lib/hw/vendor.mediatek.hardware.bluetooth.audio@2.1-impl.so android.hardware.audio.common@6.0-util.so
+vendor/lib/hw/vendor.mediatek.hardware.bluetooth.audio@2.2-impl.so android.hardware.audio.common@6.0-util.so
+vendor/lib/hw/vendor.mediatek.hardware.mms@1.7-impl.so libhidltransport.so libhwbinder.so
+vendor/lib/hw/vendor.mediatek.hardware.nvram@1.1-impl.so libhidltransport.so
+vendor/lib/libaudioclient_aidl_conversion-v33.so android.media.audio.common.types-V1-cpp.so audioclient-types-aidl-cpp.so libshmemcompat.so shared-file-region-aidl-cpp.so framework-permission-aidl-cpp.so
+vendor/lib/libaudiofoundation-v33.so android.media.audio.common.types-V1-cpp.so audioclient-types-aidl-cpp.so libaudioclient_aidl_conversion.so
+vendor/lib/libaudioprimarydevicehalifclient.so libhwbinder.so android.hardware.audio.common@7.0-util.so android.hardware.audio.common@7.1-util.so
+vendor/lib/libpkm.so libpcap.so libhidltransport.so libhwbinder.so
+vendor/lib/librgbwlightsensor.so libsensorndkbridge.so
+vendor/lib/libshmemcompat-v33.so libshmemutil.so shared-file-region-aidl-cpp.so
+vendor/lib/libshmemutil-v33.so shared-file-region-aidl-cpp.so
+vendor/lib/libstagefright_soft_aacdec.so libstagefright_softomx.so
+vendor/lib/libstagefright_soft_aacenc.so libstagefright_softomx.so
+vendor/lib/libstagefright_soft_amrdec.so libstagefright_softomx.so libstagefright_amrnb_common.so
+vendor/lib/libstagefright_soft_amrnbenc.so libstagefright_softomx.so libstagefright_amrnb_common.so
+vendor/lib/libstagefright_soft_amrwbenc.so libstagefright_softomx.so libstagefright_enc_common.so
+vendor/lib/libstagefright_soft_avcdec.so libstagefright_softomx.so
+vendor/lib/libstagefright_soft_avcenc.so libstagefright_softomx.so
+vendor/lib/libstagefright_soft_flacdec.so libstagefright_softomx.so libstagefright_flacdec.so
+vendor/lib/libstagefright_soft_flacenc.so libstagefright_softomx.so
+vendor/lib/libstagefright_soft_g711dec.so libstagefright_softomx.so
+vendor/lib/libstagefright_soft_gsmdec.so libstagefright_softomx.so
+vendor/lib/libstagefright_soft_hevcdec.so libstagefright_softomx.so
+vendor/lib/libstagefright_soft_mp3dec.so libstagefright_softomx.so
+vendor/lib/libstagefright_soft_mpeg2dec.so libstagefright_softomx.so
+vendor/lib/libstagefright_soft_mpeg4dec.so libstagefright_softomx.so
+vendor/lib/libstagefright_soft_mpeg4enc.so libstagefright_softomx.so
+vendor/lib/libstagefright_soft_opusdec.so libstagefright_softomx.so
+vendor/lib/libstagefright_soft_rawdec.so libstagefright_softomx.so
+vendor/lib/libstagefright_soft_vorbisdec.so libstagefright_softomx.so
+vendor/lib/libstagefright_soft_vpxdec.so libstagefright_softomx.so
+vendor/lib/libstagefright_soft_vpxenc.so libstagefright_softomx.so
+vendor/lib/libstagefright_softomx_plugin.so libstagefright_softomx.so
+vendor/lib/libtctcameraalgo.so libhidltransport.so libsensorndkbridge.so
+vendor/lib/libtflite_mtk.so libruy.so
+vendor/lib/libwapi.so libkeystore-wifi-hidl.so
+vendor/lib/mt6835/libaalservice.so libsensorndkbridge.so
+vendor/lib/mt6835/libmtkcam_sysutils.so libhidltransport.so libhwbinder.so
+vendor/lib64/android.hardware.audio.common@6.0-util-v33.so android.hardware.audio.common-util.so
+vendor/lib64/android.hardware.audio.common@7.0-util-v33.so android.hardware.audio.common-util.so android.hardware.audio.common@7.0-enums.so
+vendor/lib64/android.hardware.audio.common@7.1-util-v33.so android.hardware.audio.common-util.so android.hardware.audio.common@7.1-enums.so
+vendor/lib64/android.hardware.audio.effect@6.0-util-v33.so android.hardware.audio.common-util.so android.hardware.audio.common@6.0-util.so
+vendor/lib64/android.hardware.audio.effect@7.0-util-v33.so android.hardware.audio.common-util.so android.hardware.audio.common@7.0-util.so
+vendor/lib64/android.hardware.audio@7.0-util-v33.so android.hardware.audio.common-util.so android.hardware.audio.common@7.0-enums.so android.hardware.audio.common@7.0-util.so
+vendor/lib64/android.hardware.audio@7.1-util-v33.so android.hardware.audio.common-util.so android.hardware.audio.common@7.1-enums.so android.hardware.audio.common@7.1-util.so
+vendor/lib64/android.hardware.graphics.composer@2.2-resources-v33.so android.hardware.graphics.composer@2.1-resources.so
+vendor/lib64/audioclient-types-aidl-cpp-v33.so android.media.audio.common.types-V1-cpp.so framework-permission-aidl-cpp.so
+vendor/lib64/com.tct.cameraalgo.scenedetect.so libsensorndkbridge.so libhidltransport.so
+vendor/lib64/hw/android.hardware.audio.effect@6.0-impl.so android.hardware.audio.common-util.so android.hardware.audio.common@6.0-util.so android.hardware.audio.effect@6.0-util.so
+vendor/lib64/hw/android.hardware.audio.effect@7.0-impl.so android.hardware.audio.common-util.so android.hardware.audio.common@7.0-util.so android.hardware.audio.effect@7.0-util.so
+vendor/lib64/hw/android.hardware.audio@6.0-impl-mediatek.so libaudiofoundation.so libhidltransport.so android.hardware.audio.common-util.so android.hardware.audio.common@6.0-util.so
+vendor/lib64/hw/android.hardware.audio@7.0-impl-mediatek.so libaudiofoundation.so libhidltransport.so android.hardware.audio@7.0-util.so android.hardware.audio.common@7.0-enums.so android.hardware.audio.common@7.0-util.so android.hardware.audio.common-util.so
+vendor/lib64/hw/android.hardware.audio@7.1-impl-mediatek.so libaudiofoundation.so libhidltransport.so libmediautils_vendor.so android.hardware.audio@7.1-util.so android.hardware.audio.common@7.1-enums.so android.hardware.audio.common@7.1-util.so android.hardware.audio.common-util.so
+vendor/lib64/hw/android.hardware.gnss@2.1-impl-mediatek.so libhidltransport.so
+vendor/lib64/hw/android.hardware.sensors@2.X-subhal-mediatek.so android.hardware.sensors@2.0-ScopedWakelock.so
+vendor/lib64/hw/audio.primary.mediatek.so libalsautils.so android.hardware.audio.common-util.so android.hardware.audio.common@7.0-util.so android.hardware.audio.common@7.1-util.so libhidltransport.so libhwbinder.so
+vendor/lib64/hw/audio.r_submix.default.so libnbaio_mono.so
+vendor/lib64/hw/audio.r_submix.mediatek.so libnbaio_mono.so
+vendor/lib64/hw/audio.usb.default.so libalsautils.so
+vendor/lib64/hw/hwcomposer.mtk_common.so libhwbinder.so libhidltransport.so
+vendor/lib64/hw/mt6835/android.hardware.camera.provider@2.6-impl-mediatek.so libhidltransport.so
+vendor/lib64/hw/mt6835/vendor.mediatek.hardware.camera.atms@1.0-impl.so libhidltransport.so
+vendor/lib64/hw/mt6835/vendor.mediatek.hardware.camera.ccap@1.0-impl.so libhidltransport.so
+vendor/lib64/hw/mt6835/vendor.mediatek.hardware.camera.isphal@1.0-impl.so libhidltransport.so
+vendor/lib64/hw/mt6835/vendor.mediatek.hardware.camera.isphal@1.1-impl.so libhidltransport.so
+vendor/lib64/hw/mt6835/vendor.mediatek.hardware.camera.lomoeffect@1.0-impl.so libhidltransport.so
+vendor/lib64/hw/mt6835/vendor.mediatek.hardware.pq_aidl-impl.so libhidltransport.so libhwbinder.so
+vendor/lib64/hw/sensors.dynamic_sensor_hal.so libhidparser.so android.hardware.sensors@2.0-ScopedWakelock.so
+vendor/lib64/hw/vendor.mediatek.hardware.bluetooth.audio@2.1-impl.so android.hardware.audio.common@6.0-util.so
+vendor/lib64/hw/vendor.mediatek.hardware.bluetooth.audio@2.2-impl.so android.hardware.audio.common@6.0-util.so
+vendor/lib64/hw/vendor.mediatek.hardware.mms@1.7-impl.so libhidltransport.so libhwbinder.so
+vendor/lib64/hw/vendor.mediatek.hardware.nvram@1.1-impl.so libhidltransport.so
+vendor/lib64/lbs_hidl_service-impl.so libhidltransport.so
+vendor/lib64/libaudioclient_aidl_conversion-v33.so android.media.audio.common.types-V1-cpp.so audioclient-types-aidl-cpp.so libshmemcompat.so shared-file-region-aidl-cpp.so framework-permission-aidl-cpp.so
+vendor/lib64/libaudiofoundation-v33.so android.media.audio.common.types-V1-cpp.so audioclient-types-aidl-cpp.so libaudioclient_aidl_conversion.so
+vendor/lib64/libaudioprimarydevicehalifclient.so libhwbinder.so android.hardware.audio.common@7.0-util.so android.hardware.audio.common@7.1-util.so
+vendor/lib64/libcodec2_mtk_vdec.so libhwbinder.so
+vendor/lib64/libcodec2_mtk_venc.so libhwbinder.so
+vendor/lib64/libpkm.so libpcap.so libhidltransport.so libhwbinder.so
+vendor/lib64/librgbwlightsensor.so libsensorndkbridge.so
+vendor/lib64/librilfusion.so libhidltransport.so
+vendor/lib64/libshmemcompat-v33.so libshmemutil.so shared-file-region-aidl-cpp.so
+vendor/lib64/libshmemutil-v33.so shared-file-region-aidl-cpp.so
+vendor/lib64/libtctcameraalgo.so libhidltransport.so libsensorndkbridge.so
+vendor/lib64/libtflite_mtk.so libruy.so
+vendor/lib64/libwapi.so libkeystore-wifi-hidl.so
+vendor/lib64/mt6835/libaalservice.so libsensorndkbridge.so
+vendor/lib64/mt6835/libcam.hal3a.v3.platform.so libhidltransport.so libhwbinder.so
+vendor/lib64/mt6835/libcam.halisp.common.so libhidltransport.so libhwbinder.so
+vendor/lib64/mt6835/libcam.halisp.so libhidltransport.so libhwbinder.so
+vendor/lib64/mt6835/libcam.isptuning.so libhidltransport.so libhwbinder.so
+vendor/lib64/mt6835/libcam.utils.sensorprovider.so libhidltransport.so libsensorndkbridge.so
+vendor/lib64/mt6835/libcameracustom.eis.so libhidltransport.so libhwbinder.so
+vendor/lib64/mt6835/libmtkcam_device3_hidl.so libhidltransport.so
+vendor/lib64/mt6835/libmtkcam_device3_hidlutils.so libhidltransport.so
+vendor/lib64/mt6835/libmtkcam_hwutils.so libhidltransport.so libhwbinder.so
+vendor/lib64/mt6835/libmtkcam_pipelinemodel.so libhwbinder.so
+vendor/lib64/mt6835/libmtkcam_pipelinemodel_utils.so libhidltransport.so
+vendor/lib64/mt6835/libmtkcam_sysutils.so libhidltransport.so libhwbinder.so

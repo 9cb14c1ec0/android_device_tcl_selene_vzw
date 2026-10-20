@@ -3,7 +3,7 @@
 
 usage: gen-proprietary-files.py <stock dir containing vendor/> > proprietary-files.txt
 """
-import os, re, sys
+import os, re, struct, sys
 
 root = sys.argv[1]
 V = os.path.join(root, 'vendor')
@@ -29,6 +29,17 @@ EXCLUDE = [
     r'bin/hw/android\.hardware\.boot@1\.2-service$',
     r'etc/init/android\.hardware\.boot@1\.2-service\.rc$',
     r'lib(64)?/hw/android\.hardware\.boot@1\.0-impl-1\.2-mtkimpl\.so$',
+    # AOSP builds of these stock tools are used instead (the stock leaf
+    # libraries they replace are in exclude-libs.txt)
+    r'bin/(dmabuf_dump|wpa_cli)$',
+    # 32-bit Codec2 HAL: only the -64b service has an init script, so the
+    # 32-bit service and the Codec2 libraries only it loads are never used
+    r'bin/hw/android\.hardware\.media\.c2@1\.2-mediatek$',
+    r'lib/(libcodec2_[^/]+|libsfplugin_ccodec_utils|libstagefright_bufferpool@2\.0\.1)\.so$',
+    # 64-bit Android 13 Codec2 framework: compat/codec2-v33 ships these,
+    # relinked, and every 64-bit Codec2 blob already uses those
+    r'lib64/(libcodec2_vndk|libcodec2_soft_common|libsfplugin_ccodec_utils|'
+    r'libcodec2_hidl@1\.[012]|libcodec2_hidl_plugin|libstagefright_bufferpool@2\.0\.1)\.so$',
 ]
 # AOSP interface libraries (HIDL/AIDL, stable ABI) and generic AOSP vendor
 # modules that base_vendor.mk/handheld_vendor.mk install anyway: the build
@@ -46,7 +57,7 @@ COPY_ONLY_LIBS = open(os.path.join(os.path.dirname(__file__), 'copy-only-libs.tx
 _names = '|'.join(map(re.escape, COPY_ONLY_LIBS))
 COPY_ONLY = re.compile(r'^vendor/(lib(64)?/(.+/)?(' + _names + r')\.so|bin/(.+/)?(' + _names + r'))$')
 
-# Stock libraries installed under a -v33 name instead: their AOSP namesakes
+# Stock blobs installed under a -v33 name instead: their AOSP namesakes
 # would install to the same path (and, for HAL impls, their VINTF fragments).
 # extract-files.py points the users at the new name.
 RENAME = {}
@@ -56,6 +67,17 @@ RENAME.update({f'vendor/bin/hw/{b}': f'vendor/bin/hw/{b}-v33' for b in (
     'android.hardware.sensors-service.multihal',
     'wpa_supplicant',
 )})
+# Stock blobs at a path an AOSP vendor module also installs to
+# (tools/v33-paths.txt). Prebuilts with a _vendor module name would still
+# collide with the AOSP module's install and symbols/ outputs. Libraries also
+# get a -v33 SONAME; tools/v33-needed.txt lists the blobs that link them.
+V33_PATHS = open(os.path.join(os.path.dirname(__file__), 'v33-paths.txt')).read().split()
+for f in V33_PATHS:
+    RENAME[f] = f[:-3] + '-v33.so' if f.endswith('.so') else f + '-v33'
+# Same collision, but loaded by file name (HIDL passthrough -impl and hw
+# modules, media plugins), so they cannot be renamed: PRODUCT_COPY_FILES,
+# which the build installs over the AOSP module (BUILD_BROKEN_DUP_RULES).
+COPY_RULE_ONLY = set(open(os.path.join(os.path.dirname(__file__), 'copy-rule-only.txt')).read().split())
 
 files, links = [], {}
 for dp, dns, fns in os.walk(V):
@@ -81,6 +103,10 @@ for f in sorted(files):
     m = COPY_ONLY.search(f)
     if f in RENAME:
         line += ':' + RENAME[f]
+        if f.endswith('.so'):
+            line += ';FIX_SONAME'
+    elif f in COPY_RULE_ONLY:
+        line += ';MAKE_COPY_RULE_ONLY'
     elif m:
         line += ';MODULE_SUFFIX=_vendor'
     elif APK.search(f):
@@ -90,6 +116,52 @@ for f in sorted(files):
     out.append(line)
 for tgt, srcs in sorted(links.items()):
     dangling += [f'{s} -> /{tgt}' for s in srcs]
+
+
+def elf_needed(path):
+    """(is64, DT_NEEDED list) of an ELF file, or None."""
+    with open(path, 'rb') as fh:
+        d = fh.read()
+    if d[:4] != b'\x7fELF':
+        return None
+    is64 = d[4] == 2
+    if is64:
+        shoff, = struct.unpack_from('<Q', d, 0x28)
+        shentsize, shnum = struct.unpack_from('<HH', d, 0x3A)
+        sh, dyn = '<IIQQQQIIQQ', '<qQ'
+    else:
+        shoff, = struct.unpack_from('<I', d, 0x20)
+        shentsize, shnum = struct.unpack_from('<HH', d, 0x2E)
+        sh, dyn = '<IIIIIIIIII', '<iI'
+    secs = [struct.unpack_from(sh, d, shoff + i * shentsize) for i in range(shnum)]
+    needed = []
+    for _, typ, _, _, off, size, link, _, _, _ in secs:
+        if typ != 6:  # SHT_DYNAMIC
+            continue
+        stroff = secs[link][4]
+        for o in range(off, off + size, struct.calcsize(dyn)):
+            tag, val = struct.unpack_from(dyn, d, o)
+            if tag == 0:
+                break
+            if tag == 1:  # DT_NEEDED
+                needed.append(d[stroff + val:d.index(b'\0', stroff + val)].decode())
+    return is64, needed
+
+
+# Blobs that link a -v33 library: <installed path> <library>... (the library
+# of the same bitness, by its stock name), for extract-files.py.
+v33_libs = {(f.startswith('vendor/lib64/'), os.path.basename(f))
+            for f in V33_PATHS if f.endswith('.so')}
+with open(os.path.join(os.path.dirname(__file__), 'v33-needed.txt'), 'w') as fh:
+    for f in sorted(files):
+        if any(e.search(f) for e in EXCLUDE):
+            continue
+        elf = elf_needed(os.path.join(root, f))
+        if not elf:
+            continue
+        libs = [n for n in elf[1] if (elf[0], n) in v33_libs]
+        if libs:
+            fh.write(' '.join([RENAME.get(f, f)] + libs) + '\n')
 
 print('# Proprietary files for the TCL Tab 8 NxtPaper 5G (8189S / selene_vzw).')
 print('#')

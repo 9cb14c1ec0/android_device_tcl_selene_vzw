@@ -142,7 +142,9 @@ PRODUCT_PACKAGES += \
 # list, built from source here)
 PRODUCT_PACKAGES += \
     vndservicemanager \
-    vndservice
+    vndservice \
+    dmabuf_dump.vendor \
+    wpa_cli
 
 
 PRODUCT_SOONG_NAMESPACES += $(LOCAL_PATH)
