@@ -225,7 +225,7 @@ BUILD_BROKEN_PREBUILT_ELF_FILES := true
 
 # Security patch levels (stock vendor; stock boot, so KeyMint's boot patch
 # level does not change)
-VENDOR_SECURITY_PATCH := 2026-05-05
+VENDOR_SECURITY_PATCH := 2026-08-05
 BOOT_SECURITY_PATCH := 2024-05-05
 
 BUILD_BROKEN_DUP_RULES := true

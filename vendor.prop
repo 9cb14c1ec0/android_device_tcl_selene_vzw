@@ -1,6 +1,6 @@
 # vendor.prop for selene_vzw
 #
-# From the stock vendor build.prop (TP1A.220624.014 4PEN), deduplicated
+# From the stock vendor build.prop (TP1A.220624.014 4PEQ), deduplicated
 # (last value wins) and without the props the build generates itself.
 
 init.userspace_reboot.is_supported=true

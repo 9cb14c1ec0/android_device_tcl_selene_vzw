@@ -23,5 +23,5 @@ decl typeattribute $S/plat_sepolicy.cil $SE/system_ext_sepolicy.cil $P/product_s
 wc -l $PORT_TMP/*.txt
 export PORT_DROP="$HERE/sepolicy-port-drop.txt"
 python3 "$HERE/sepolicy_port.py" "$HERE/../sepolicy/vendor"
-python3 "$HERE/merge_stock_contexts.py" "${STOCK_SELINUX:-/home/android/tcltab8attempt2/lineage/stock/vendor/etc/selinux}" \
+python3 "$HERE/merge_stock_contexts.py" "${STOCK_SELINUX:-/home/android/tcltab8attempt2/lineage/stock-4PEQ/vendor/etc/selinux}" \
     "$HERE/../sepolicy/vendor" "$PORT_TMP" "$HERE/../../../.."

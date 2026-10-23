@@ -35,6 +35,6 @@ PRODUCT_USE_DYNAMIC_PARTITIONS := true
 PRODUCT_BUILD_PROP_OVERRIDES += \
     DeviceName=Selene_VZW \
     DeviceProduct=8189S \
-    BuildDesc="8189S-user 15 AP3A.240905.015.A2 4PEN release-keys"
+    BuildDesc="8189S-user 15 AP3A.240905.015.A2 4PEQ release-keys"
 
-BUILD_FINGERPRINT := TCL/8189S/Selene_VZW:15/AP3A.240905.015.A2/4PEN:user/release-keys
+BUILD_FINGERPRINT := TCL/8189S/Selene_VZW:15/AP3A.240905.015.A2/4PEQ:user/release-keys
