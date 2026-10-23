@@ -1,0 +1,8 @@
+# SPDX-FileCopyrightText: The LineageOS Project
+# SPDX-License-Identifier: Apache-2.0
+#
+# NXTPAPER key (tct_ui_key driver). Stock maps KEY 598 to its own UI_SWITCH
+# keycode; MACRO_1 is never passed to apps, and the NxtPaper key handler
+# consumes the key by scan code before that.
+
+key 598   MACRO_1

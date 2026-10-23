@@ -146,6 +146,14 @@ PRODUCT_PACKAGES += \
     dmabuf_dump.vendor \
     wpa_cli
 
+# NXTPAPER key and display modes (nxtpaper/): regular, Color Paper, Ink Paper.
+# The key handler runs in system_server (overlay-lineage), plus a QS tile.
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/configs/keylayout/tswt.kl:$(TARGET_COPY_OUT_VENDOR)/usr/keylayout/tswt.kl
+PRODUCT_PACKAGE_OVERLAYS += \
+    $(LOCAL_PATH)/overlay-lineage
+PRODUCT_PACKAGES += \
+    NxtPaper
 
 PRODUCT_SOONG_NAMESPACES += $(LOCAL_PATH)
 

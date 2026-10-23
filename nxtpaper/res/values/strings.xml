@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     SPDX-FileCopyrightText: The LineageOS Project
+     SPDX-License-Identifier: Apache-2.0
+-->
+<resources>
+    <string name="app_name">NXTPAPER</string>
+    <string name="tile_label">NXTPAPER</string>
+    <string name="mode_regular">Regular mode</string>
+    <string name="mode_color_paper">Color Paper</string>
+    <string name="mode_ink_paper">Ink Paper</string>
+</resources>
